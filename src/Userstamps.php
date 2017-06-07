@@ -47,7 +47,7 @@ trait Userstamps {
         static $usingSoftDeletes;
 
         if (is_null($usingSoftDeletes)) {
-            return $usingSoftDeletes = in_array('Illuminate\Database\Eloquent\SoftDeletes', class_uses(get_called_class()));
+            return $usingSoftDeletes = in_array('Illuminate\Database\Eloquent\SoftDeletes', self::classUsesDeep(get_called_class()));
         }
 
         return $usingSoftDeletes;
@@ -119,5 +119,26 @@ trait Userstamps {
         }
 
         return auth() -> guard() -> getProvider() -> getModel();
+    }
+
+    /**
+     * Get ALL traits including those used by parent classes and other traits.
+     *
+     * @param mixed $class
+     * @param bool $autoload
+     * @return array
+     */
+    protected static function classUsesDeep($class, $autoload = true) {
+        $traits = [];
+
+        do {
+            $traits = array_merge(class_uses($class, $autoload), $traits);
+        } while ($class = get_parent_class($class));
+
+        foreach ($traits as $trait => $same) {
+            $traits = array_merge(class_uses($trait, $autoload), $traits);
+        }
+
+        return array_unique($traits);
     }
 }

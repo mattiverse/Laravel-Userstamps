@@ -2,21 +2,21 @@
 
 namespace Wildside\Userstamps\Listeners;
 
-class Deleting {
+class Deleting extends Controller {
 
     /**
      * When the model is being deleted.
      *
-     * @param Illuminate\Database\Eloquent $model
+     * @param Illuminate\Database\Eloquent\Model|static
      * @return void
      */
     public function handle($model)
     {
-        if (! $model -> isUserstamping()) {
+        if (! $this->prep($model)) {
             return;
         }
 
-        $model -> deleted_by = auth() -> id();
+        $model -> {$this->deleted_by} = auth() -> id();
         $model -> save();
     }
 }

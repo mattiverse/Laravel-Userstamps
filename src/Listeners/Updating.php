@@ -2,20 +2,20 @@
 
 namespace Wildside\Userstamps\Listeners;
 
-class Updating {
+class Updating extends Controller {
 
     /**
      * When the model is being updated.
      *
-     * @param Illuminate\Database\Eloquent $model
+     * @param Illuminate\Database\Eloquent\Model|static
      * @return void
      */
     public function handle($model)
     {
-        if (! $model -> isUserstamping()) {
+        if (! $this->prep($model)) {
             return;
         }
 
-        $model -> updated_by = auth() -> id();
+        $model -> {$this->updated_by} = auth() -> id();
     }
 }

@@ -2,21 +2,21 @@
 
 namespace Wildside\Userstamps\Listeners;
 
-class Creating {
+class Creating extends Controller {
 
     /**
      * When the model is being created.
      *
-     * @param Illuminate\Database\Eloquent $model
+     * @param Illuminate\Database\Eloquent\Model|static
      * @return void
      */
     public function handle($model)
     {
-        if (! $model -> isUserstamping()) {
+        if (! $this->prep($model)) {
             return;
         }
 
-        $model -> created_by = auth() -> id();
-        $model -> updated_by = auth() -> id();
+        $model -> {$this->created_by} = auth() -> id();
+        $model -> {$this->updated_by} = auth() -> id();
     }
 }

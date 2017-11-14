@@ -16,7 +16,12 @@ class Creating extends Controller {
             return;
         }
 
-        $model -> {$this->created_by} = auth() -> id();
-        $model -> {$this->updated_by} = auth() -> id();
+        if (is_null($model -> {$this->created_by})) {
+            $model -> {$this->created_by} = auth() -> id();
+        }
+
+        if (is_null($model -> {$this->updated_by})) {
+            $model -> {$this->updated_by} = auth() -> id();
+        }
     }
 }

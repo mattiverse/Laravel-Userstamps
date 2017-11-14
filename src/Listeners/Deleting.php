@@ -16,7 +16,10 @@ class Deleting extends Controller {
             return;
         }
 
-        $model -> {$this->deleted_by} = auth() -> id();
+        if (is_null($model -> {$this->deleted_by})) {
+            $model -> {$this->deleted_by} = auth() -> id();
+        }
+
         $model -> save();
     }
 }

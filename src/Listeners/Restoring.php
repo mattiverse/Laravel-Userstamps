@@ -2,20 +2,20 @@
 
 namespace Wildside\Userstamps\Listeners;
 
-class Restoring {
+class Restoring extends Controller {
 
     /**
      * When the model is being restored.
      *
-     * @param Illuminate\Database\Eloquent $model
+     * @param Illuminate\Database\Eloquent\Model|static
      * @return void
      */
     public function handle($model)
     {
-        if (! $model -> isUserstamping()) {
+        if (! $this->prep($model)) {
             return;
         }
 
-        $model -> deleted_by = null;
+        $model -> {$this->deleted_by} = null;
     }
 }

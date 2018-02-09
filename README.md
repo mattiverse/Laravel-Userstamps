@@ -42,3 +42,11 @@ $model -> destroyer; // the user who deleted the model
 ```
 
 If you want to manually set the `created_by` or `updated_by` properties on your model you can stop Userstamps being automatically maintained using the `stopUserstamping` method.
+
+If you want to use custom `created_by`, `updated_by`, or `deleted_by` column names similer to Laravel's timestamp `created_at`, `updated_at`, and `deleted_at` constants, simply add the following to whichever class you are using userstamps in.
+
+```php
+const CREATED_BY = ''; // your custom created_by column name
+const UPDATED_BY = ''; // your custom updated_by column name
+const DELETED_BY = ''; // your custom deleted_by column name
+```

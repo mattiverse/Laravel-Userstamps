@@ -12,6 +12,13 @@ trait Userstamps {
     protected $userstamping = true;
 
     /**
+     * Whether we should sync status with timestamps.
+     *
+     * @param bool
+     */
+    protected $syncUserWithTime = true;
+
+    /**
      * Boot the userstamps trait for a model.
      *
      * @return void
@@ -108,33 +115,73 @@ trait Userstamps {
     }
 
     /**
-     * Check if we're maintaing Userstamps on the model.
+     * Check if we're maintaing Userstamps on the model. Use Timestamps value if we are syncronizing and update to reflect
      *
      * @return bool
      */
     public function isUserstamping()
     {
+        if ($this -> syncUserWithTime) {
+            $this -> userstamping = $this -> timestamps;
+        }
+ 
         return $this -> userstamping;
     }
 
     /**
-     * Stop maintaining Userstamps on the model.
+     * Stop maintaining Userstamps on the model and update Timestamps if we are syncronizing.
      *
      * @return void
      */
     public function stopUserstamping()
     {
         $this -> userstamping = false;
+
+        if ($this -> syncUserWithTime) {
+            $this -> timestamps = false;
+        }
     }
 
     /**
-     * Start maintaining Userstamps on the model.
+     * Start maintaining Userstamps on the model and update Timestamps if we are syncronizing.
      *
      * @return void
      */
     public function startUserstamping()
     {
         $this -> userstamping = true;
+
+        if ($this -> syncUserWithTime) {
+            $this -> timestamps = true;
+        }
+    }
+
+    /**
+     * Stop maintaining Timestamps on the model and update Userstamps if we are syncronizing.
+     *
+     * @return void
+     */
+    public function stopTimestamping()
+    {
+        $this -> timestamps = false;
+
+        if ($this -> syncUserWithTime) {
+            $this -> userstamping = false;
+        }
+    }
+
+    /**
+     * Start maintaining Timestamps on the model and update Userstamps if we are syncronizing.
+     *
+     * @return void
+     */
+    public function startTimestamping()
+    {
+        $this -> timestamps = true;
+
+        if ($this -> syncUserWithTime) {
+            $this -> userstamping = true;
+        }
     }
 
     /**

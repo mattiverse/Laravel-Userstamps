@@ -1,6 +1,6 @@
 {
-    "name": "wildside/userstamps",
-    "description": "Eloquent trait to automatically maintain created_by and updated_by (and deleted_by when using SoftDeletes) on your models",
+    "name": "mazyvan/userstamps",
+    "description": "A fork from WildSide. Eloquent trait to automatically maintain created_by and updated_by (and deleted_by when using SoftDeletes) on your models",
     "license": "MIT",
     "keywords": [
         "laravel",
@@ -15,6 +15,10 @@
             "name": "WildSide",
             "email": "hello@wildside.uk",
             "homepage": "https://wildside.uk"
+        },
+        {
+            "name": "Iván Sánchez",
+            "email": "mazyvan@hotmail.com"
         }
     ],
     "require": {
@@ -23,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Wildside\\Userstamps\\": "src"
+            "Mazyvan\\Userstamps\\": "src"
         }
     }
 }

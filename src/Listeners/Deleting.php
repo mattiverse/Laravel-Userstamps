@@ -20,6 +20,12 @@ class Deleting {
             $model -> {$model -> getDeletedByColumn()} = auth() -> id();
         }
 
+        $dispatcher = $model -> getEventDispatcher();
+
+        $model -> unsetEventDispatcher();
+
         $model -> save();
+
+        $model -> setEventDispatcher($dispatcher);
     }
 }

@@ -1,4 +1,6 @@
-# Wildside/Userstamps
+# Mazyvan/Userstamps
+
+**Warning**: This is a fork from WildSideUK/Laravel-Userstamps that doesn't fire the laravel "update" [events](https://laravel.com/docs/5.4/eloquent#events) on deletions. It's only purpouse is for the Virtuamx team to work with this lib while the WildSideUK team check for the [issue 23](https://github.com/WildSideUK/Laravel-Userstamps/issues/23). If they approve the pull request. This fork will be deprecated.
 
 Provides an Eloquent trait to automatically maintain created_by and updated_by (and deleted_by when using SoftDeletes) on your models.
 
@@ -12,7 +14,7 @@ Provides an Eloquent trait to automatically maintain created_by and updated_by (
 Require this package with composer
 
 ````
-composer require wildside/userstamps
+composer require mazyvan/userstamps
 ````
 
 Migrate your Model's table to include a `created_by` and `updated_by` (and `deleted_by` if using `SoftDeletes`).
@@ -25,7 +27,7 @@ $table -> unsignedInteger('updated_by') -> nullable() -> default(null) -> after(
 Load the trait in your Model.
 
 ```php
-use Wildside\Userstamps\Userstamps;
+use Mazyvan\Userstamps\Userstamps;
 
 class Example extends Model {
 

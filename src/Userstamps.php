@@ -144,10 +144,6 @@ trait Userstamps {
      */
     protected function getUserClass()
     {
-        if (get_class(auth()) === 'Illuminate\Auth\Guard') {
-            return auth() -> getProvider() -> getModel();
-        }
-
-        return auth() -> guard() -> getProvider() -> getModel();
+        return config('auth.providers.users.model');
     }
 }

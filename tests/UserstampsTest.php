@@ -1,12 +1,12 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
 use Wildside\Userstamps\Userstamps;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class UserstampsTest extends TestCase
 {
@@ -88,9 +88,9 @@ class UserstampsTest extends TestCase
 
     protected function createFooWithBars()
     {
-        $foo = $this -> createFoo();
+        $foo = $this->createFoo();
 
-        $foo -> bars() -> saveMany([
+        $foo->bars()->saveMany([
             new Bar([
                 'foo' => 1,
             ]),
@@ -234,7 +234,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals(2, $foo->alt_deleted_by);
         $this->assertNull($foo->deleted_by);
 
-        $foo -> restore();
+        $foo->restore();
         $this->assertNull($foo->alt_deleted_by);
     }
 

@@ -2,8 +2,8 @@
 
 namespace Wildside\Userstamps\Listeners;
 
-class Restoring {
-
+class Restoring
+{
     /**
      * When the model is being restored.
      *
@@ -12,10 +12,10 @@ class Restoring {
      */
     public function handle($model)
     {
-        if (! $model -> isUserstamping()) {
+        if (! $model->isUserstamping()) {
             return;
         }
 
-        $model -> {$model -> getDeletedByColumn()} = null;
+        $model->{$model->getDeletedByColumn()} = null;
     }
 }

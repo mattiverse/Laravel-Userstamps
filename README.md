@@ -5,7 +5,7 @@ Provides an Eloquent trait to automatically maintain created_by and updated_by (
 ## Requirements
 
 * This package requires PHP 5.6+
-* It works with Laravel 5.x (and may work with earlier versions too).
+* It works with Laravel 5.2+.
 
 ## Installation
 
@@ -18,8 +18,8 @@ composer require wildside/userstamps
 Migrate your Model's table to include a `created_by` and `updated_by` (and `deleted_by` if using `SoftDeletes`).
 
 ```php
-$table -> unsignedInteger('created_by') -> nullable() -> default(null) -> after('created_at');
-$table -> unsignedInteger('updated_by') -> nullable() -> default(null) -> after('updated_at');
+$table -> unsignedBigInteger('created_by') -> nullable() -> after('created_at');
+$table -> unsignedBigInteger('updated_by') -> nullable() -> after('updated_at');
 ```
 
 Load the trait in your Model.

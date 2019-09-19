@@ -12,14 +12,19 @@
     ],
     "authors": [
         {
-            "name": "WildSide",
+            "name": "WILDSIDE",
             "email": "hello@wildside.uk",
             "homepage": "https://wildside.uk"
         }
     ],
     "require": {
         "php": ">=5.5.9",
-        "illuminate/support": "5.0.*|5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*"
+        "illuminate/support": "^5.1|^6.0"
+    },
+    "require-dev": {
+        "illuminate/database": "^5.1|^6.0",
+        "orchestra/testbench": "^3.1|^4.0",
+        "phpunit/phpunit": "^5.0|^6.0|^7.0|^8.3"
     },
     "autoload": {
         "psr-4": {

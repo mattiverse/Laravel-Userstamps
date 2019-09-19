@@ -146,4 +146,4 @@ trait Userstamps
     {
         return config('auth.providers.users.model');
     }
-  
+}

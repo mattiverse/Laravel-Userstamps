@@ -39,7 +39,7 @@ Your model will need to include a `created_by` and `updated_by` column, defaulti
 
 If using the Laravel `SoftDeletes` trait, it will also need a `deleted_by` column.
 
-The column type should match the type of the ID colummn in your user's table. In Laravel <= 5.7 this defaults to `unsignedInteger`. For Laravel >= 5.8 this defaults to `unsignedBigInteger`.
+The column type should match the type of the ID column in your user's table. In Laravel <= 5.7 this defaults to `unsignedInteger`. For Laravel >= 5.8 this defaults to `unsignedBigInteger`.
 
 An example migration:
 

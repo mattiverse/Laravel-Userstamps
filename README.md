@@ -91,7 +91,7 @@ $model->startUserstamping(); // resumes userstamps being maintained on the model
 
 ## Workarounds
 
-This package works by by hooking into Eloquent's model event listeners, and is subject to the same limitations of all such listeners.
+This package works by hooking into Eloquent's model event listeners, and is subject to the same limitations of all such listeners.
 
 When you make changes to models that bypass Eloquent, the event listeners won't be fired and userstamps will not be updated.
 

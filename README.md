@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-    <a href="https://travis-ci.com/WildSideUK/Laravel-Userstamps">
-        <img src="https://travis-ci.com/WildSideUK/Laravel-Userstamps.svg" alt="Build Status">
+    <a href="https://github.com/WildsideUK/Laravel-Userstamps/actions/workflows/tests.yml">
+        <img src="https://github.com/WildsideUK/Laravel-Userstamps/actions/workflows/tests.yml/badge.svg" alt="Build Status">
     </a>
     <a href="https://packagist.org/packages/wildside/userstamps">
         <img src="https://poser.pugx.org/wildside/userstamps/d/total.svg" alt="Total Downloads">

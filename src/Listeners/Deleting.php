@@ -9,7 +9,7 @@ class Deleting
     /**
      * When the model is being deleted.
      *
-     * @param Illuminate\Database\Eloquent $model
+     * @param  Illuminate\Database\Eloquent  $model
      * @return void
      */
     public function handle($model)

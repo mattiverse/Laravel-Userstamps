@@ -2,6 +2,8 @@
 
 namespace Wildside\Userstamps;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 trait Userstamps
 {
     /**
@@ -57,24 +59,30 @@ trait Userstamps
 
     /**
      * Get the user that created the model.
+     * 
+     * @return BelongsTo
      */
-    public function creator()
+    public function creator(): BelongsTo
     {
         return $this->belongsTo($this->getUserClass(), $this->getCreatedByColumn());
     }
 
     /**
      * Get the user that edited the model.
+     * 
+     * @return BelongsTo
      */
-    public function editor()
+    public function editor(): BelongsTo
     {
         return $this->belongsTo($this->getUserClass(), $this->getUpdatedByColumn());
     }
 
     /**
      * Get the user that deleted the model.
+     * 
+     * @return BelongsTo
      */
-    public function destroyer()
+    public function destroyer(): BelongsTo
     {
         return $this->belongsTo($this->getUserClass(), $this->getDeletedByColumn());
     }

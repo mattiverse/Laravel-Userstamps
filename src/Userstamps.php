@@ -62,7 +62,7 @@ trait Userstamps
      * 
      * @return BelongsTo
      */
-    public function creator(): BelongsTo
+    public function creator()
     {
         return $this->belongsTo($this->getUserClass(), $this->getCreatedByColumn());
     }
@@ -72,7 +72,7 @@ trait Userstamps
      * 
      * @return BelongsTo
      */
-    public function editor(): BelongsTo
+    public function editor()
     {
         return $this->belongsTo($this->getUserClass(), $this->getUpdatedByColumn());
     }
@@ -82,7 +82,7 @@ trait Userstamps
      * 
      * @return BelongsTo
      */
-    public function destroyer(): BelongsTo
+    public function destroyer()
     {
         return $this->belongsTo($this->getUserClass(), $this->getDeletedByColumn());
     }

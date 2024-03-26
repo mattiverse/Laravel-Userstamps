@@ -60,7 +60,7 @@ trait Userstamps
      */
     public function creator()
     {
-        return $this->belongsTo($this->getUserClass(), $this->getCreatedByColumn(), $this->getCreatedByKey());
+        return $this->belongsTo($this->getUserClass(), $this->getCreatedByColumn(), $this->getCreatedByOwnerKey());
     }
 
     /**
@@ -68,7 +68,7 @@ trait Userstamps
      */
     public function editor()
     {
-        return $this->belongsTo($this->getUserClass(), $this->getUpdatedByColumn(), $this->getUpdatedByKey());
+        return $this->belongsTo($this->getUserClass(), $this->getUpdatedByColumn(), $this->getUpdatedByOwnerKey());
     }
 
     /**
@@ -76,7 +76,7 @@ trait Userstamps
      */
     public function destroyer()
     {
-        return $this->belongsTo($this->getUserClass(), $this->getDeletedByColumn(), $this->getDeletedByKey());
+        return $this->belongsTo($this->getUserClass(), $this->getDeletedByColumn(), $this->getDeletedByOwnerKey());
     }
 
     /**
@@ -92,11 +92,11 @@ trait Userstamps
     /**
      * Get the name of the foreign "id" column for the creator.
      *
-     * @return string
+     * @return null|string
      */
-    public function getCreatedByKey()
+    public function getCreatedByOwnerKey()
     {
-        return defined('static::CREATED_BY_KEY') ? static::CREATED_BY_KEY : (new $this->getUserClass())->getKeyName();
+        return defined('static::CREATED_BY_OWNER_KEY') ? static::CREATED_BY_OWNER_KEY : null;
     }
 
     /**
@@ -112,11 +112,11 @@ trait Userstamps
     /**
      *  Get the name of the foreign "id" column for the editor.
      *
-     * @return string
+     * @return null|string
      */
-    public function getUpdatedByKey()
+    public function getUpdatedByOwnerKey()
     {
-        return defined('static::UPDATED_BY_KEY') ? static::UPDATED_BY_KEY : (new $this->getUserClass())->getKeyName();
+        return defined('static::UPDATED_BY_OWNER_KEY') ? static::UPDATED_BY_OWNER_KEY : null;
     }
 
     /**
@@ -132,11 +132,11 @@ trait Userstamps
     /**
      *  Get the name of the foreign "id" column for the destroyer.
      *
-     * @return string
+     * @return null|string
      */
-    public function getDeletedByKey()
+    public function getDeletedByOwnerKey()
     {
-        return defined('static::DELETED_BY_KEY') ? static::DELETED_BY_KEY : (new $this->getUserClass())->getKeyName();
+        return defined('static::DELETED_BY_OWNER_KEY') ? static::DELETED_BY_OWNER_KEY : null;
     }
 
     /**

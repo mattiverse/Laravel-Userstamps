@@ -74,7 +74,7 @@ class Foo extends Model {
 }
 ```
 
-In addition, you may also override the foreign key used by the `creator`, `editor` and `destroyer` relations by setting the following class constants on your model. Ensure you match these column types in your migration.
+In addition, you may also override the foreign owner key used by the `creator`, `editor` and `destroyer` relations by setting the following class constants on your model. Ensure you match these column types in your migration.
 
 ```php
 use Wildside\Userstamps\Userstamps;
@@ -83,9 +83,9 @@ class Foo extends Model {
 
     use Userstamps;
 
-    const CREATED_BY_KEY = 'uuid';
-    const UPDATED_BY_KEY = 'uuid';
-    const DELETED_BY_KEY = 'uuid';
+    const CREATED_BY_OWNER_KEY = 'uuid';
+    const UPDATED_BY_OWNER_KEY = 'uuid';
+    const DELETED_BY_OWNER_KEY = 'uuid';
 }
 ```
 

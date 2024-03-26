@@ -96,7 +96,7 @@ trait Userstamps
      */
     public function getCreatedByKey()
     {
-        return defined('static::CREATED_BY_KEY') ? static::CREATED_BY_KEY : (new ($this->getUserClass())->getKeyName();
+        return defined('static::CREATED_BY_KEY') ? static::CREATED_BY_KEY : (new $this->getUserClass())->getKeyName();
     }
 
 
@@ -117,7 +117,7 @@ trait Userstamps
      */
     public function getUpdatedByKey()
     {
-        return defined('static::UPDATED_BY_KEY') ? static::UPDATED_BY_KEY : (new ($this->getUserClass())->getKeyName();
+        return defined('static::UPDATED_BY_KEY') ? static::UPDATED_BY_KEY : (new $this->getUserClass())->getKeyName();
     }
 
     /**
@@ -137,7 +137,7 @@ trait Userstamps
      */
     public function getDeletedByKey()
     {
-        return defined('static::DELETED_BY_KEY') ? static::DELETED_BY_KEY : (new ($this->getUserClass())->getKeyName();
+        return defined('static::DELETED_BY_KEY') ? static::DELETED_BY_KEY : (new $this->getUserClass())->getKeyName();
     }
 
     /**

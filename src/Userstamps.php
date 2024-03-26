@@ -90,7 +90,7 @@ trait Userstamps
     }
 
     /**
-     * Get the name of the "created by" column.
+     * Get the name of the foreign "id" column for the creator.
      *
      * @return string
      */
@@ -111,7 +111,7 @@ trait Userstamps
     }
 
     /**
-     * Get the name of the "created by" column.
+     *  Get the name of the foreign "id" column for the editor.
      *
      * @return string
      */
@@ -131,7 +131,7 @@ trait Userstamps
     }
 
     /**
-     * Get the name of the "created by" column.
+     *  Get the name of the foreign "id" column for the destroyer.
      *
      * @return string
      */

@@ -19,11 +19,11 @@ class Creating
         }
 
         if (is_null($model->{$model->getCreatedByColumn()})) {
-            $model->{$model->getCreatedByColumn()} = Auth::id();
+            $model->{$model->getCreatedByColumn()} = Auth::user()?->{$model->getCreatedByOwnerKey()} ?? Auth::id();
         }
 
         if (is_null($model->{$model->getUpdatedByColumn()}) && ! is_null($model->getUpdatedByColumn())) {
-            $model->{$model->getUpdatedByColumn()} = Auth::id();
+            $model->{$model->getUpdatedByColumn()} = Auth::user()?->{$model->getUpdatedByOwnerKey()} ?? Auth::id();
         }
     }
 }

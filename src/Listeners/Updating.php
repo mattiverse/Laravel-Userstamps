@@ -18,6 +18,6 @@ class Updating
             return;
         }
 
-        $model->{$model->getUpdatedByColumn()} = Auth::id();
+        $model->{$model->getUpdatedByColumn()} = Auth::user()?->{$model->getUpdatedByOwnerKey()} ?? Auth::id();
     }
 }

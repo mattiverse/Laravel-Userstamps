@@ -19,7 +19,7 @@ class Deleting
         }
 
         if (is_null($model->{$model->getDeletedByColumn()})) {
-            $model->{$model->getDeletedByColumn()} = Auth::id();
+            $model->{$model->getDeletedByColumn()} = Auth::user()?->{$model->getDeletedByOwnerKey()} ?? Auth::id();
         }
 
         $dispatcher = $model->getEventDispatcher();

@@ -60,7 +60,7 @@ trait Userstamps
      */
     public function creator()
     {
-        return $this->belongsTo($this->getUserClass(), $this->getCreatedByColumn());
+        return $this->belongsTo($this->getUserClass(), $this->getCreatedByColumn(), $this->getCreatedByKey());
     }
 
     /**
@@ -68,7 +68,7 @@ trait Userstamps
      */
     public function editor()
     {
-        return $this->belongsTo($this->getUserClass(), $this->getUpdatedByColumn());
+        return $this->belongsTo($this->getUserClass(), $this->getUpdatedByColumn(), $this->getUpdatedByKey());
     }
 
     /**
@@ -76,7 +76,7 @@ trait Userstamps
      */
     public function destroyer()
     {
-        return $this->belongsTo($this->getUserClass(), $this->getDeletedByColumn());
+        return $this->belongsTo($this->getUserClass(), $this->getDeletedByColumn(), $this->getDeletedByKey());
     }
 
     /**
@@ -90,6 +90,17 @@ trait Userstamps
     }
 
     /**
+     * Get the name of the "created by" column.
+     *
+     * @return string
+     */
+    public function getCreatedByKey()
+    {
+        return defined('static::CREATED_BY_KEY') ? static::CREATED_BY_KEY : (new ($this->getUserClass())->getKeyName();
+    }
+
+
+    /**
      * Get the name of the "updated by" column.
      *
      * @return string
@@ -100,6 +111,16 @@ trait Userstamps
     }
 
     /**
+     * Get the name of the "created by" column.
+     *
+     * @return string
+     */
+    public function getUpdatedByKey()
+    {
+        return defined('static::UPDATED_BY_KEY') ? static::UPDATED_BY_KEY : (new ($this->getUserClass())->getKeyName();
+    }
+
+    /**
      * Get the name of the "deleted by" column.
      *
      * @return string
@@ -107,6 +128,16 @@ trait Userstamps
     public function getDeletedByColumn()
     {
         return defined('static::DELETED_BY') ? static::DELETED_BY : 'deleted_by';
+    }
+
+    /**
+     * Get the name of the "created by" column.
+     *
+     * @return string
+     */
+    public function getDeletedByKey()
+    {
+        return defined('static::DELETED_BY_KEY') ? static::DELETED_BY_KEY : (new ($this->getUserClass())->getKeyName();
     }
 
     /**

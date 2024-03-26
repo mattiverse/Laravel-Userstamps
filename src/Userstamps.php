@@ -99,7 +99,6 @@ trait Userstamps
         return defined('static::CREATED_BY_KEY') ? static::CREATED_BY_KEY : (new $this->getUserClass())->getKeyName();
     }
 
-
     /**
      * Get the name of the "updated by" column.
      *

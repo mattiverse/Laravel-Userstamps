@@ -15,7 +15,7 @@ class UserstampsTest extends TestCase
      *
      * @var array
      */
-    protected $afterApplicationCreatedCallbacks = [
+    protected array $afterApplicationCreatedCallbacks = [
         'UserstampsTest::handleSetup',
     ];
 

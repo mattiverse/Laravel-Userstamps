@@ -74,6 +74,27 @@ class Foo extends Model {
 }
 ```
 
+In addition, you may also override the foreign key used by the `creator`, `editor` and `destroyer` relations by setting the following class constants on your model. Ensure you match these column types in your migration.
+
+```php
+use Wildside\Userstamps\Userstamps;
+
+class Foo extends Model {
+
+    use Userstamps;
+
+    const CREATED_BY_KEY = 'uuid';
+    const UPDATED_BY_KEY = 'uuid';
+    const DELETED_BY_KEY = 'uuid';
+}
+```
+
+An example migration:
+
+```php
+$table->foreignUuid('created_by')->nullable();
+```
+
 When using this trait, helper relationships are available to let you retrieve the user who created, updated and deleted (when using the Laravel `SoftDeletes` trait) your model.
 
 ```php

@@ -54,17 +54,17 @@ trait Userstamps
 
     public function getCreatedByColumn(): ?string
     {
-        return defined('static::CREATED_BY') ? constant(static::class . '::CREATED_BY') : 'created_by';
+        return defined('static::CREATED_BY') ? constant(static::class.'::CREATED_BY') : 'created_by';
     }
 
     public function getUpdatedByColumn(): ?string
     {
-        return defined('static::UPDATED_BY') ? constant(static::class . '::UPDATED_BY') : 'updated_by';
+        return defined('static::UPDATED_BY') ? constant(static::class.'::UPDATED_BY') : 'updated_by';
     }
 
     public function getDeletedByColumn(): ?string
     {
-        return defined('static::DELETED_BY') ? constant(static::class . '::DELETED_BY') : 'deleted_by';
+        return defined('static::DELETED_BY') ? constant(static::class.'::DELETED_BY') : 'deleted_by';
     }
 
     public function isUserstamping(): bool

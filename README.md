@@ -36,13 +36,13 @@ Your model will need to include a `created_by` and `updated_by` column, defaulti
 
 If using the Laravel `SoftDeletes` trait, it will also need a `deleted_by` column.
 
-The column type should match the type of the ID column in your user's table. This defaults to `unsignedBigInteger`.
+The column type should match the type of the ID column in your user's table.
 
 An example migration:
 
 ```php
-$table->unsignedBigInteger('created_by')->nullable();
-$table->unsignedBigInteger('updated_by')->nullable();
+$table->foreignId('created_by')->nullable();
+$table->foreignId('updated_by')->nullable();
 ```
 
 You can now load the trait within your model, and userstamps will automatically be maintained:

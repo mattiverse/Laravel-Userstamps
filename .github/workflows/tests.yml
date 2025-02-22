@@ -1,0 +1,50 @@
+name: Tests
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest]
+        php: [8.2, 8.3, 8.4]
+        laravel: [9.*, 10.*, 11.*]
+        include:
+          - laravel: 9.*
+            phpunit: 9.*
+            testbench: 7.*
+          - laravel: 10.*
+            phpunit: 10.*
+            testbench: 8.*
+          - laravel: 11.*
+            phpunit: 10.*
+            testbench: 9.*
+        exclude:
+          - php: 8.3
+            laravel: 9.*
+          - php: 8.4
+            laravel: 9.*
+          - php: 8.4
+            laravel: 10.*
+
+    name: P${{ matrix.php }} - L${{ matrix.laravel }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+
+      - name: Install dependencies
+        run: |
+          composer require "illuminate/contracts:${{ matrix.laravel }}" "phpunit/phpunit:${{ matrix.phpunit }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer install --prefer-dist --no-interaction
+
+      - name: Execute tests
+        run: vendor/bin/phpunit

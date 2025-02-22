@@ -2,7 +2,7 @@
 
 namespace Mattiverse\Userstamps\Listeners;
 
-use Illuminate\Support\Facades\Auth;
+use Mattiverse\Userstamps\Userstamps;
 
 class Deleting
 {
@@ -19,7 +19,7 @@ class Deleting
         }
 
         if (is_null($model->{$model->getDeletedByColumn()})) {
-            $model->{$model->getDeletedByColumn()} = Auth::id();
+            $model->{$model->getDeletedByColumn()} = Userstamps::getUserId();
         }
 
         $dispatcher = $model->getEventDispatcher();

@@ -2,7 +2,7 @@
 
 namespace Mattiverse\Userstamps\Listeners;
 
-use Illuminate\Support\Facades\Auth;
+use Mattiverse\Userstamps\Userstamps;
 
 class Creating
 {
@@ -19,11 +19,11 @@ class Creating
         }
 
         if (is_null($model->{$model->getCreatedByColumn()})) {
-            $model->{$model->getCreatedByColumn()} = Auth::id();
+            $model->{$model->getCreatedByColumn()} = Userstamps::getUserId();
         }
 
         if (is_null($model->{$model->getUpdatedByColumn()}) && ! is_null($model->getUpdatedByColumn())) {
-            $model->{$model->getUpdatedByColumn()} = Auth::id();
+            $model->{$model->getUpdatedByColumn()} = Userstamps::getUserId();
         }
     }
 }

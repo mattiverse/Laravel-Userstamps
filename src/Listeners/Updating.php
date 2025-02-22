@@ -2,7 +2,7 @@
 
 namespace Mattiverse\Userstamps\Listeners;
 
-use Illuminate\Support\Facades\Auth;
+use Mattiverse\Userstamps\Userstamps;
 
 class Updating
 {
@@ -14,10 +14,10 @@ class Updating
      */
     public function handle($model)
     {
-        if (! $model->isUserstamping() || is_null($model->getUpdatedByColumn()) || is_null(Auth::id())) {
+        if (! $model->isUserstamping() || is_null($model->getUpdatedByColumn()) || is_null(Userstamps::getUserId())) {
             return;
         }
 
-        $model->{$model->getUpdatedByColumn()} = Auth::id();
+        $model->{$model->getUpdatedByColumn()} = Userstamps::getUserId();
     }
 }

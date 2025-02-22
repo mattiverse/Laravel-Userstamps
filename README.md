@@ -3,9 +3,6 @@
 </p>
 
 <p align="center">
-    <a href="https://travis-ci.com/WildSideUK/Laravel-Userstamps">
-        <img src="https://travis-ci.com/WildSideUK/Laravel-Userstamps.svg" alt="Build Status">
-    </a>
     <a href="https://packagist.org/packages/wildside/userstamps">
         <img src="https://poser.pugx.org/wildside/userstamps/d/total.svg" alt="Total Downloads">
     </a>
@@ -29,9 +26,9 @@ This package requires Laravel 5.2 or later running on PHP 5.6 or higher.
 
 This package can be installed using composer:
 
-````
+```
 composer require wildside/userstamps
-````
+```
 
 ## Usage
 
@@ -116,9 +113,9 @@ $model->foos()->update([
 
 As a workaroud to this issue two helper methods are available - `updateWithUserstamps` and `deleteWithUserstamps`. Their behaviour is identical to `update` and `delete`, but they ensure the `updated_by` and `deleted_by` properties are maintained on the model.
 
- You generally won't have to use these methods, unless making bulk updates that bypass Eloquent events.
+You generally won't have to use these methods, unless making bulk updates that bypass Eloquent events.
 
- In this example, models are bulk updated and userstamps **will not** be maintained:
+In this example, models are bulk updated and userstamps **will not** be maintained:
 
 ```php
 $model->where('name', 'foo')->update([
@@ -133,14 +130,6 @@ $model->where('name', 'foo')->updateWithUserstamps([
     'name' => 'bar',
 ]);
 ```
-
-## Sponsors
-
-<a href="https://wildside.uk">
-    <img src="https://wildside.uk/images/wildside-logo.svg" height="50">
-</a>
-
-This open-source software is developed and maintained by <a href="https://wildside.uk">WILDSIDE</a>.
 
 ## License
 

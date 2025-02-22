@@ -17,7 +17,7 @@ class Creating
             $model->{$model->getCreatedByColumn()} = Userstamps::getUserId();
         }
 
-        if (is_null($model->{$model->getUpdatedByColumn()}) && ! is_null($model->getUpdatedByColumn())) {
+        if (! is_null($model->getUpdatedByColumn()) && is_null($model->{$model->getUpdatedByColumn()})) {
             $model->{$model->getUpdatedByColumn()} = Userstamps::getUserId();
         }
     }

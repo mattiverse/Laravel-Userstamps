@@ -48,7 +48,7 @@ $table->unsignedBigInteger('updated_by')->nullable();
 You can now load the trait within your model, and userstamps will automatically be maintained:
 
 ```php
-use Mattiverse\Userstamps\Userstamps;
+use Mattiverse\Userstamps\Traits\Userstamps;
 
 class Foo extends Model {
 
@@ -59,7 +59,7 @@ class Foo extends Model {
 Optionally, should you wish to override the names of the `created_by`, `updated_by` or `deleted_by` columns, you can do so by setting the appropriate class constants on your model. Ensure you match these column names in your migration.
 
 ```php
-use Mattiverse\Userstamps\Userstamps;
+use Mattiverse\Userstamps\Traits\Userstamps;
 
 class Foo extends Model {
 
@@ -85,6 +85,24 @@ Methods are also available to temporarily stop the automatic maintaining of user
 $model->stopUserstamping(); // stops userstamps being maintained on the model
 $model->startUserstamping(); // resumes userstamps being maintained on the model
 ```
+
+## Resolving Users
+
+By default users will be resolved using the Laravel `Auth::id()` method, to return the ID of the currently authenticated user.
+
+More advanced use-cases are supported with a custom resolution strategy.
+
+In this example, a custom resolution method is called to retrieve the ID.
+
+```php
+use Mattiverse\Userstamps\Userstamps;
+
+Userstamps::resolveUsing(
+    fn () => auth()->user()->customUserIdResolutionMethod()
+);
+```
+
+The `Userstamps::resolveUsing` method is likely best suited to the `boot` method of `AppServiceProvider`.
 
 ## Workarounds
 

@@ -6,15 +6,11 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
+use Mattiverse\Userstamps\Traits\Userstamps as UserstampsTrait;
 use Mattiverse\Userstamps\Userstamps;
 
 class UserstampsTest extends TestCase
 {
-    /**
-     * The callbacks that should be run after the application is created.
-     *
-     * @var array
-     */
     protected array $afterApplicationCreatedCallbacks = [
         'UserstampsTest::handleSetup',
     ];
@@ -390,11 +386,27 @@ class UserstampsTest extends TestCase
         $this->assertEquals(2, $foo->alt_updated_by);
         $this->assertEquals(2, $foo->alt_deleted_by);
     }
+
+    public function testValuesAreOverriddenWhenUsingResolveCallback()
+    {
+        Userstamps::resolveUsing(fn () => 'bar');
+
+        $this->app['auth']->loginUsingId(1);
+
+        $foo = $this->createFooWithSoftDeletes();
+
+        $this->assertEquals('bar', $foo->created_by);
+        $this->assertEquals('bar', $foo->updated_by);
+
+        $foo->delete();
+
+        $this->assertEquals('bar', $foo->deleted_by);
+    }
 }
 
 class Foo extends Model
 {
-    use Userstamps;
+    use UserstampsTrait;
 
     public $table = 'foos';
     public $timestamps = false;
@@ -403,7 +415,7 @@ class Foo extends Model
 
 class FooWithSoftDeletes extends Model
 {
-    use SoftDeletes, Userstamps;
+    use SoftDeletes, UserstampsTrait;
 
     public $table = 'foos';
     protected $guarded = [];
@@ -411,7 +423,7 @@ class FooWithSoftDeletes extends Model
 
 class FooWithCustomColumnNames extends Model
 {
-    use SoftDeletes, Userstamps;
+    use SoftDeletes, UserstampsTrait;
 
     public $table = 'foos';
     protected $guarded = [];
@@ -423,7 +435,7 @@ class FooWithCustomColumnNames extends Model
 
 class FooWithNullColumnNames extends Model
 {
-    use SoftDeletes, Userstamps;
+    use SoftDeletes, UserstampsTrait;
 
     public $table = 'foos';
     protected $guarded = [];

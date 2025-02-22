@@ -6,31 +6,16 @@ use Mattiverse\Userstamps\UserstampsScope;
 
 trait Userstamps
 {
-    /**
-     * Whether we're currently maintaing userstamps.
-     *
-     * @param bool
-     */
-    protected $userstamping = true;
+    protected bool $userstamping = true;
 
-    /**
-     * Boot the userstamps trait for a model.
-     *
-     * @return void
-     */
-    public static function bootUserstamps()
+    public static function bootUserstamps(): void
     {
         static::addGlobalScope(new UserstampsScope);
 
         static::registerListeners();
     }
 
-    /**
-     * Register events we need to listen for.
-     *
-     * @return void
-     */
-    public static function registerListeners()
+    public static function registerListeners(): void
     {
         static::creating('Mattiverse\Userstamps\Listeners\Creating@handle');
         static::updating('Mattiverse\Userstamps\Listeners\Updating@handle');
@@ -41,12 +26,7 @@ trait Userstamps
         }
     }
 
-    /**
-     * Has the model loaded the SoftDeletes trait.
-     *
-     * @return bool
-     */
-    public static function usingSoftDeletes()
+    public static function usingSoftDeletes(): bool
     {
         static $usingSoftDeletes;
 
@@ -57,96 +37,52 @@ trait Userstamps
         return $usingSoftDeletes;
     }
 
-    /**
-     * Get the user that created the model.
-     */
-    public function creator()
+    public function creator(): mixed
     {
         return $this->belongsTo($this->getUserClass(), $this->getCreatedByColumn());
     }
 
-    /**
-     * Get the user that edited the model.
-     */
-    public function editor()
+    public function editor(): mixed
     {
         return $this->belongsTo($this->getUserClass(), $this->getUpdatedByColumn());
     }
 
-    /**
-     * Get the user that deleted the model.
-     */
-    public function destroyer()
+    public function destroyer(): mixed
     {
         return $this->belongsTo($this->getUserClass(), $this->getDeletedByColumn());
     }
 
-    /**
-     * Get the name of the "created by" column.
-     *
-     * @return string
-     */
-    public function getCreatedByColumn()
+    public function getCreatedByColumn(): ?string
     {
-        return defined('static::CREATED_BY') ? static::CREATED_BY : 'created_by';
+        return defined('static::CREATED_BY') ? constant(static::class . '::CREATED_BY') : 'created_by';
     }
 
-    /**
-     * Get the name of the "updated by" column.
-     *
-     * @return string
-     */
-    public function getUpdatedByColumn()
+    public function getUpdatedByColumn(): ?string
     {
-        return defined('static::UPDATED_BY') ? static::UPDATED_BY : 'updated_by';
+        return defined('static::UPDATED_BY') ? constant(static::class . '::UPDATED_BY') : 'updated_by';
     }
 
-    /**
-     * Get the name of the "deleted by" column.
-     *
-     * @return string
-     */
-    public function getDeletedByColumn()
+    public function getDeletedByColumn(): ?string
     {
-        return defined('static::DELETED_BY') ? static::DELETED_BY : 'deleted_by';
+        return defined('static::DELETED_BY') ? constant(static::class . '::DELETED_BY') : 'deleted_by';
     }
 
-    /**
-     * Check if we're maintaing Userstamps on the model.
-     *
-     * @return bool
-     */
-    public function isUserstamping()
+    public function isUserstamping(): bool
     {
         return $this->userstamping;
     }
 
-    /**
-     * Stop maintaining Userstamps on the model.
-     *
-     * @return void
-     */
-    public function stopUserstamping()
+    public function stopUserstamping(): void
     {
         $this->userstamping = false;
     }
 
-    /**
-     * Start maintaining Userstamps on the model.
-     *
-     * @return void
-     */
-    public function startUserstamping()
+    public function startUserstamping(): void
     {
         $this->userstamping = true;
     }
 
-    /**
-     * Get the class being used to provide a User.
-     *
-     * @return string
-     */
-    protected function getUserClass()
+    protected function getUserClass(): string
     {
         return config('auth.providers.users.model');
     }

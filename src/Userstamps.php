@@ -11,9 +11,6 @@ class Userstamps
      */
     protected static $resolveUsingCallback = null;
 
-    /**
-     * Register a callback that is responsible for resolving the user.
-     */
     public static function resolveUsing(callable $callback): void
     {
         static::$resolveUsingCallback = $callback;

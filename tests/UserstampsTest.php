@@ -5,9 +5,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Schema;
-use Orchestra\Testbench\TestCase;
 use Mattiverse\Userstamps\Traits\Userstamps as UserstampsTrait;
 use Mattiverse\Userstamps\Userstamps;
+use Orchestra\Testbench\TestCase;
 
 class UserstampsTest extends TestCase
 {
@@ -15,7 +15,7 @@ class UserstampsTest extends TestCase
         'UserstampsTest::handleSetup',
     ];
 
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         $app['config']->set('app.debug', 'true');
         $app['config']->set('auth.providers.users.model', TestUser::class);
@@ -30,7 +30,7 @@ class UserstampsTest extends TestCase
         $app['config']->set('hashing', ['driver' => 'bcrypt']);
     }
 
-    protected static function handleSetUp()
+    protected static function handleSetUp(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
@@ -59,35 +59,35 @@ class UserstampsTest extends TestCase
         ]);
     }
 
-    protected function createFoo()
+    protected function createFoo(): Foo
     {
         return Foo::create([
             'bar' => 'foo',
         ]);
     }
 
-    protected function createFooWithSoftDeletes()
+    protected function createFooWithSoftDeletes(): FooWithSoftDeletes
     {
         return FooWithSoftDeletes::create([
             'bar' => 'foo',
         ]);
     }
 
-    protected function createFooWithCustomColumnNames()
+    protected function createFooWithCustomColumnNames(): FooWithCustomColumnNames
     {
         return FooWithCustomColumnNames::create([
             'bar' => 'foo',
         ]);
     }
 
-    protected function createFooWithNullColumnNames()
+    protected function createFooWithNullColumnNames(): FooWithNullColumnNames
     {
         return FooWithNullColumnNames::create([
             'bar' => 'foo',
         ]);
     }
 
-    public function testCreatedByAndUpdatedByIsSetOnNewModelWhenUserIsPresent()
+    public function test_created_by_and_updated_by_is_set_on_new_model_when_user_is_present(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -97,7 +97,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals(1, $foo->updated_by);
     }
 
-    public function testCreatedByIsNullOnNewModelWhenUserIsNotPresent()
+    public function test_created_by_is_null_on_new_model_when_user_is_not_present(): void
     {
         $foo = $this->createFoo();
 
@@ -105,7 +105,7 @@ class UserstampsTest extends TestCase
         $this->assertNull($foo->updated_by);
     }
 
-    public function testCreatedByIsNotChangedWhenModelIsUpdated()
+    public function test_created_by_is_not_changed_when_model_is_updated(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -120,7 +120,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals(1, $foo->created_by);
     }
 
-    public function testUpdatedByIsSetWhenUserIsPresent()
+    public function test_updated_by_is_set_when_user_is_present(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -135,7 +135,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals(2, $foo->updated_by);
     }
 
-    public function testUpdatedByIsNotChangedWhenUserIsNotPresent()
+    public function test_updated_by_is_not_changed_when_user_is_not_present(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -150,7 +150,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals(1, $foo->updated_by);
     }
 
-    public function testDeletedByIsSetOnSoftDeletingModelWhenUserIsPresent()
+    public function test_deleted_by_is_set_on_soft_deleting_model_when_user_is_present(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -163,7 +163,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals(1, $foo->deleted_by);
     }
 
-    public function testDeletedByIsNotSetOnSoftDeletingModelWhenUserIsNotPresent()
+    public function test_deleted_by_is_not_set_on_soft_deleting_model_when_user_is_not_present(): void
     {
         $foo = $this->createFooWithSoftDeletes();
 
@@ -172,7 +172,7 @@ class UserstampsTest extends TestCase
         $this->assertNull($foo->deleted_by);
     }
 
-    public function testDeletedByIsNullWhenRestoringModel()
+    public function test_deleted_by_is_null_when_restoring_model(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -184,7 +184,7 @@ class UserstampsTest extends TestCase
         $this->assertNull($foo->deleted_by);
     }
 
-    public function testUpdatedByIsNotChangedWhenDeletingModel()
+    public function test_updated_by_is_not_changed_when_deleting_model(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -197,7 +197,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals(1, $foo->updated_by);
     }
 
-    public function testCustomColumnNamesAreSupported()
+    public function test_custom_column_names_are_supported(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -226,7 +226,7 @@ class UserstampsTest extends TestCase
         $this->assertNull($foo->alt_deleted_by);
     }
 
-    public function testNullColumnNamesDisableUserstamps()
+    public function test_null_column_names_disable_userstamps(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -251,7 +251,7 @@ class UserstampsTest extends TestCase
         $this->assertNull($foo->deleted_by);
     }
 
-    public function testStopUserstampingMethodWorks()
+    public function test_stop_userstamping_method_works(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -271,7 +271,7 @@ class UserstampsTest extends TestCase
         $this->assertNull($foo->deleted_by);
     }
 
-    public function testStartUserstampingMethodWorks()
+    public function test_start_userstamping_method_works(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -292,7 +292,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals(2, $foo->deleted_by);
     }
 
-    public function testCreatorMethodWorks()
+    public function test_creator_method_works(): void
     {
         $user = $this->app['auth']->loginUsingId(1);
 
@@ -301,7 +301,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals($user, $foo->creator);
     }
 
-    public function testEditorMethodWorks()
+    public function test_editor_method_works(): void
     {
         $user = $this->app['auth']->loginUsingId(1);
 
@@ -310,7 +310,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals($user, $foo->editor);
     }
 
-    public function testDestroyerMethodWorks()
+    public function test_destroyer_method_works(): void
     {
         $user = $this->app['auth']->loginUsingId(1);
 
@@ -320,7 +320,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals($user, $foo->destroyer);
     }
 
-    public function testUpdateWithUserstampsMethod()
+    public function test_update_with_userstamps_method(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -335,7 +335,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals(2, Foo::first()->updated_by);
     }
 
-    public function testDeleteWithUserstampsMethod()
+    public function test_delete_with_userstamps_method(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -348,7 +348,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals(2, FooWithSoftDeletes::withTrashed()->first()->deleted_by);
     }
 
-    public function testDeleteWithUserstampsMethodDoesntTouchUpdatedBy()
+    public function test_delete_with_userstamps_method_doesnt_touch_updated_by(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -365,7 +365,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals(2, $foo->deleted_by);
     }
 
-    public function testBuilderMethodWorksWithCustomColumnNames()
+    public function test_builder_method_works_with_custom_column_names(): void
     {
         $this->app['auth']->loginUsingId(1);
 
@@ -387,7 +387,7 @@ class UserstampsTest extends TestCase
         $this->assertEquals(2, $foo->alt_deleted_by);
     }
 
-    public function testValuesAreOverriddenWhenUsingResolveCallback()
+    public function test_values_are_overridden_when_using_resolve_callback(): void
     {
         Userstamps::resolveUsing(fn () => 'bar');
 
@@ -408,8 +408,10 @@ class Foo extends Model
 {
     use UserstampsTrait;
 
-    public $table = 'foos';
     public $timestamps = false;
+
+    protected $table = 'foos';
+
     protected $guarded = [];
 }
 
@@ -417,7 +419,8 @@ class FooWithSoftDeletes extends Model
 {
     use SoftDeletes, UserstampsTrait;
 
-    public $table = 'foos';
+    protected $table = 'foos';
+
     protected $guarded = [];
 }
 
@@ -425,11 +428,14 @@ class FooWithCustomColumnNames extends Model
 {
     use SoftDeletes, UserstampsTrait;
 
-    public $table = 'foos';
+    protected $table = 'foos';
+
     protected $guarded = [];
 
     const CREATED_BY = 'alt_created_by';
+
     const UPDATED_BY = 'alt_updated_by';
+
     const DELETED_BY = 'alt_deleted_by';
 }
 
@@ -437,17 +443,22 @@ class FooWithNullColumnNames extends Model
 {
     use SoftDeletes, UserstampsTrait;
 
-    public $table = 'foos';
+    protected $table = 'foos';
+
     protected $guarded = [];
 
     const CREATED_BY = null;
+
     const UPDATED_BY = null;
+
     const DELETED_BY = null;
 }
 
 class TestUser extends Authenticatable
 {
-    public $table = 'users';
     public $timestamps = false;
+
+    protected $table = 'users';
+
     protected $guarded = [];
 }

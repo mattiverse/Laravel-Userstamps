@@ -48,7 +48,7 @@ $table->unsignedBigInteger('updated_by')->nullable();
 You can now load the trait within your model, and userstamps will automatically be maintained:
 
 ```php
-use Wildside\Userstamps\Userstamps;
+use Mattiverse\Userstamps\Userstamps;
 
 class Foo extends Model {
 
@@ -59,7 +59,7 @@ class Foo extends Model {
 Optionally, should you wish to override the names of the `created_by`, `updated_by` or `deleted_by` columns, you can do so by setting the appropriate class constants on your model. Ensure you match these column names in your migration.
 
 ```php
-use Wildside\Userstamps\Userstamps;
+use Mattiverse\Userstamps\Userstamps;
 
 class Foo extends Model {
 

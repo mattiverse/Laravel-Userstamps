@@ -1,6 +1,6 @@
 <?php
 
-namespace Wildside\Userstamps\Listeners;
+namespace Mattiverse\Userstamps\Listeners;
 
 class Restoring
 {

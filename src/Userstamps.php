@@ -1,6 +1,6 @@
 <?php
 
-namespace Wildside\Userstamps;
+namespace Mattiverse\Userstamps;
 
 trait Userstamps
 {
@@ -30,12 +30,12 @@ trait Userstamps
      */
     public static function registerListeners()
     {
-        static::creating('Wildside\Userstamps\Listeners\Creating@handle');
-        static::updating('Wildside\Userstamps\Listeners\Updating@handle');
+        static::creating('Mattiverse\Userstamps\Listeners\Creating@handle');
+        static::updating('Mattiverse\Userstamps\Listeners\Updating@handle');
 
         if (static::usingSoftDeletes()) {
-            static::deleting('Wildside\Userstamps\Listeners\Deleting@handle');
-            static::restoring('Wildside\Userstamps\Listeners\Restoring@handle');
+            static::deleting('Mattiverse\Userstamps\Listeners\Deleting@handle');
+            static::restoring('Mattiverse\Userstamps\Listeners\Restoring@handle');
         }
     }
 

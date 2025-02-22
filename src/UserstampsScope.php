@@ -1,6 +1,6 @@
 <?php
 
-namespace Wildside\Userstamps;
+namespace Mattiverse\Userstamps;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;

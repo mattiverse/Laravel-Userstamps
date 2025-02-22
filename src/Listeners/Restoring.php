@@ -2,15 +2,11 @@
 
 namespace Mattiverse\Userstamps\Listeners;
 
+use Illuminate\Database\Eloquent\Model;
+
 class Restoring
 {
-    /**
-     * When the model is being restored.
-     *
-     * @param  Illuminate\Database\Eloquent  $model
-     * @return void
-     */
-    public function handle($model)
+    public function handle(Model $model): void
     {
         if (! $model->isUserstamping() || is_null($model->getDeletedByColumn())) {
             return;

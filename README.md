@@ -2,17 +2,13 @@
     <img src="https://s3-eu-west-1.amazonaws.com/ws.hosted/userstamps-logo.svg" width="300">
 </p>
 
-<p align="center">
-    <a href="https://packagist.org/packages/wildside/userstamps">
-        <img src="https://poser.pugx.org/wildside/userstamps/d/total.svg" alt="Total Downloads">
-    </a>
-    <a href="https://packagist.org/packages/wildside/userstamps">
-        <img src="https://poser.pugx.org/wildside/userstamps/v/stable.svg" alt="Latest Stable Version">
-    </a>
-    <a href="https://packagist.org/packages/wildside/userstamps">
-        <img src="https://poser.pugx.org/wildside/userstamps/license.svg" alt="License">
-    </a>
-</p>
+<div align="center">
+
+[![Total Downloads](https://poser.pugx.org/wildside/userstamps/downloads)](https://packagist.org/packages/wildside/userstamps)
+[![Latest Stable Version](https://poser.pugx.org/wildside/userstamps/v)](https://packagist.org/packages/wildside/userstamps)
+[![License](https://poser.pugx.org/wildside/userstamps/license)](https://packagist.org/packages/wildside/userstamps)
+
+</div>
 
 ## About Laravel Userstamps
 

@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://s3-eu-west-1.amazonaws.com/ws.hosted/userstamps-logo.svg" width="300">
+    <img src="./logo.svg" width="300">
 </p>
 
 <div align="center">

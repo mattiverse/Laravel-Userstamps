@@ -4,3 +4,4 @@
 /.gitignore         export-ignore
 /.styleci.yml       export-ignore
 /phpunit.xml.dist   export-ignore
+/logo.svg           export-ignore

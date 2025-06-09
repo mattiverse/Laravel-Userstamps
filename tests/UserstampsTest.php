@@ -30,6 +30,11 @@ class UserstampsTest extends TestCase
         $app['config']->set('hashing', ['driver' => 'bcrypt']);
     }
 
+    protected function getPackageProviders($app)
+    {
+        return ['Mattiverse\Userstamps\UserstampsServiceProvider'];
+    }
+
     protected static function handleSetUp(): void
     {
         Schema::create('users', function (Blueprint $table) {
@@ -401,6 +406,64 @@ class UserstampsTest extends TestCase
         $foo->delete();
 
         $this->assertEquals('bar', $foo->deleted_by);
+    }
+
+    public function test_it_can_add_userstamps_columns()
+    {
+        Schema::create('userstampable', function (Blueprint $table) {
+            $table->id();
+            $table->userstamps();
+        });
+
+        $colummns = Schema::getColumnListing('userstampable');
+
+        $this->assertContains('created_by', $colummns);
+        $this->assertContains('updated_by', $colummns);
+    }
+
+    public function test_it_can_add_userstamps_soft_delete_column()
+    {
+        Schema::create('userstampable', function (Blueprint $table) {
+            $table->id();
+            $table->userstampSoftDeletes();
+        });
+
+        $colummns = Schema::getColumnListing('userstampable');
+
+        $this->assertContains('deleted_by', $colummns);
+    }
+
+    public function test_it_can_drop_userstamps_columns()
+    {
+        Schema::create('userstampable', function (Blueprint $table) {
+            $table->id();
+            $table->userstamps();
+        });
+
+        Schema::table('userstampable', function (Blueprint $table) {
+            $table->dropUserstamps();
+        });
+
+        $colummns = Schema::getColumnListing('userstampable');
+
+        $this->assertNotContains('created_by', $colummns);
+        $this->assertNotContains('updated_by', $colummns);
+    }
+
+    public function test_it_can_drop_userstamps_soft_delete_column()
+    {
+        Schema::create('userstampable', function (Blueprint $table) {
+            $table->id();
+            $table->userstampSoftDeletes();
+        });
+
+        Schema::table('userstampable', function (Blueprint $table) {
+            $table->dropUserstampSoftDeletes();
+        });
+
+        $colummns = Schema::getColumnListing('userstampable');
+
+        $this->assertNotContains('deleted_by', $colummns);
     }
 }
 

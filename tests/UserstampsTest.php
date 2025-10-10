@@ -394,7 +394,7 @@ class UserstampsTest extends TestCase
 
     public function test_values_are_overridden_when_using_resolve_callback(): void
     {
-        Userstamps::resolveUsing(fn () => 'bar');
+        Userstamps::resolveUsing(fn() => 'bar');
 
         $this->app['auth']->loginUsingId(1);
 
@@ -412,7 +412,7 @@ class UserstampsTest extends TestCase
     {
         Schema::create('userstampable', function (Blueprint $table) {
             $table->id();
-            $table->userstamps();
+            $table->userstamps('unsignedBigInteger');
         });
 
         $colummns = Schema::getColumnListing('userstampable');
@@ -425,7 +425,7 @@ class UserstampsTest extends TestCase
     {
         Schema::create('userstampable', function (Blueprint $table) {
             $table->id();
-            $table->userstampSoftDeletes();
+            $table->userstampSoftDeletes('unsignedBigInteger');
         });
 
         $colummns = Schema::getColumnListing('userstampable');
@@ -437,7 +437,7 @@ class UserstampsTest extends TestCase
     {
         Schema::create('userstampable', function (Blueprint $table) {
             $table->id();
-            $table->userstamps();
+            $table->userstamps('unsignedBigInteger');
         });
 
         Schema::table('userstampable', function (Blueprint $table) {
@@ -454,7 +454,7 @@ class UserstampsTest extends TestCase
     {
         Schema::create('userstampable', function (Blueprint $table) {
             $table->id();
-            $table->userstampSoftDeletes();
+            $table->userstampSoftDeletes('unsignedBigInteger');
         });
 
         Schema::table('userstampable', function (Blueprint $table) {

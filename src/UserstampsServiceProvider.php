@@ -17,9 +17,9 @@ class UserstampsServiceProvider extends ServiceProvider
     {
         Blueprint::macro(
             'userstamps',
-            function ($dataType = 'foreignId') {
+            function ($dataType = 'unsignedBigInteger') {
                 switch ($dataType) {
-                    case "foreignId":
+                    case "unsignedBigInteger":
                         $this->foreignId('created_by')->nullable();
                         $this->foreignId('updated_by')->nullable();
                         break;
@@ -38,9 +38,9 @@ class UserstampsServiceProvider extends ServiceProvider
 
         Blueprint::macro(
             'userstampSoftDeletes',
-            function ($dataType = 'foreignId') {
+            function ($dataType = 'unsignedBigInteger') {
                 switch ($dataType) {
-                    case "foreignId":
+                    case "unsignedBigInteger":
                         $this->foreignId('deleted_by')->nullable();
                         break;
 

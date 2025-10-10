@@ -4,6 +4,7 @@ namespace Mattiverse\Userstamps;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\ServiceProvider;
+use InvalidArgumentException;
 
 class UserstampsServiceProvider extends ServiceProvider
 {
@@ -16,17 +17,40 @@ class UserstampsServiceProvider extends ServiceProvider
     {
         Blueprint::macro(
             'userstamps',
-            function ($dataType) {
-                $this->$dataType('created_by')->nullable();
-                $this->$dataType('updated_by')->nullable();
+            function ($dataType = 'foreignId') {
+                switch ($dataType) {
+                    case "foreignId":
+                        $this->foreignId('created_by')->nullable();
+                        $this->foreignId('updated_by')->nullable();
+                        break;
+
+                    case "uuid":
+                        $this->uuid('created_by')->nullable();
+                        $this->uuid('updated_by')->nullable();
+                        break;
+
+                    default:
+                        throw new InvalidArgumentException("Unsupported data type: $dataType");
+                }
             }
         );
 
 
         Blueprint::macro(
             'userstampSoftDeletes',
-            function ($dataType) {
-                $this->$dataType('deleted_by')->nullable();
+            function ($dataType = 'foreignId') {
+                switch ($dataType) {
+                    case "foreignId":
+                        $this->foreignId('deleted_by')->nullable();
+                        break;
+
+                    case "uuid":
+                        $this->uuid('deleted_by')->nullable();
+                        break;
+
+                    default:
+                        throw new InvalidArgumentException("Unsupported data type: $dataType");
+                }
             }
         );
 

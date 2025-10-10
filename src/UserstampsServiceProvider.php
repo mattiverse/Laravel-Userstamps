@@ -16,16 +16,17 @@ class UserstampsServiceProvider extends ServiceProvider
     {
         Blueprint::macro(
             'userstamps',
-            function () {
-                $this->foreignId('created_by')->nullable();
-                $this->foreignId('updated_by')->nullable();
+            function ($dataType) {
+                $this->$dataType('created_by')->nullable();
+                $this->$dataType('updated_by')->nullable();
             }
         );
 
+
         Blueprint::macro(
             'userstampSoftDeletes',
-            function () {
-                $this->foreignId('deleted_by')->nullable();
+            function ($dataType) {
+                $this->$dataType('deleted_by')->nullable();
             }
         );
 

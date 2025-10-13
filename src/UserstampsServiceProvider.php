@@ -35,7 +35,6 @@ class UserstampsServiceProvider extends ServiceProvider
             }
         );
 
-
         Blueprint::macro(
             'userstampSoftDeletes',
             function ($dataType = 'unsignedBigInteger') {

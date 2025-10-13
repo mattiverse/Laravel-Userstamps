@@ -19,18 +19,18 @@ class UserstampsServiceProvider extends ServiceProvider
             'userstamps',
             function ($dataType = 'unsignedBigInteger') {
                 switch ($dataType) {
-                    case "unsignedBigInteger":
+                    case 'unsignedBigInteger':
                         $this->foreignId('created_by')->nullable();
                         $this->foreignId('updated_by')->nullable();
                         break;
 
-                    case "uuid":
+                    case 'uuid':
                         $this->uuid('created_by')->nullable();
                         $this->uuid('updated_by')->nullable();
                         break;
 
                     default:
-                        throw new InvalidArgumentException("Unsupported data type: $dataType");
+                        throw new InvalidArgumentException(`Unsupported data type : $dataType`);
                 }
             }
         );
@@ -40,16 +40,16 @@ class UserstampsServiceProvider extends ServiceProvider
             'userstampSoftDeletes',
             function ($dataType = 'unsignedBigInteger') {
                 switch ($dataType) {
-                    case "unsignedBigInteger":
+                    case 'unsignedBigInteger':
                         $this->foreignId('deleted_by')->nullable();
                         break;
 
-                    case "uuid":
+                    case 'uuid':
                         $this->uuid('deleted_by')->nullable();
                         break;
 
                     default:
-                        throw new InvalidArgumentException("Unsupported data type: $dataType");
+                        throw new InvalidArgumentException(`Unsupported data type : $dataType`);
                 }
             }
         );

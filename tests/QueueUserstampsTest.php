@@ -169,7 +169,9 @@ class CreateModelJob
 {
     use Dispatchable, InteractsWithQueue, SerializesModels;
 
-    public function __construct(public string $name) {}
+    public function __construct(public string $name)
+    {
+    }
 
     public function handle(): void
     {
@@ -181,7 +183,9 @@ class UpdateModelJob
 {
     use Dispatchable, InteractsWithQueue, SerializesModels;
 
-    public function __construct(public int $id, public string $name) {}
+    public function __construct(public int $id, public string $name)
+    {
+    }
 
     public function handle(): void
     {
@@ -194,7 +198,9 @@ class DeleteModelJob
 {
     use Dispatchable, InteractsWithQueue, SerializesModels;
 
-    public function __construct(public int $id) {}
+    public function __construct(public int $id)
+    {
+    }
 
     public function handle(): void
     {

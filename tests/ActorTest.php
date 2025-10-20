@@ -6,127 +6,96 @@ use Orchestra\Testbench\TestCase;
 
 class ActorTest extends TestCase
 {
-    protected function setUp(): void
+protected function setUp(): void
     {
         parent::setUp();
-
-        // Clear actor state between tests
         Actor::clear();
     }
 
     protected function tearDown(): void
     {
-        // Clear actor state after tests
         Actor::clear();
-
         parent::tearDown();
     }
 
-    public function test_actor_id_returns_null_when_no_user_and_no_actor_set(): void
+    public function test_actor_can_set_and_get_user_id(): void
     {
-        // Mock Auth to return null
-        Auth::shouldReceive('id')->andReturn(null);
-
-        $this->assertNull(Actor::id());
-    }
-
-    public function test_actor_id_returns_auth_id_when_user_is_authenticated(): void
-    {
-        // Mock Auth to return a user ID
-        Auth::shouldReceive('id')->andReturn(1);
-
-        $this->assertEquals(1, Actor::id());
-    }
-
-    public function test_actor_set_stores_the_provided_id(): void
-    {
-        // Mock Auth to return null (simulating no authenticated user)
-        Auth::shouldReceive('id')->andReturn(null);
-
         Actor::set(42);
 
         $this->assertEquals(42, Actor::id());
     }
 
-    public function test_actor_id_prefers_auth_id_over_stored_actor_id(): void
+    public function test_actor_returns_null_when_not_set_and_no_auth(): void
     {
-        Actor::set(42);
-
-        // Mock Auth to return a different user ID
-        Auth::shouldReceive('id')->andReturn(1);
-
-        // Auth::id() should take precedence
-        $this->assertEquals(1, Actor::id());
+        $this->assertNull(Actor::id());
     }
 
-    public function test_actor_id_falls_back_to_stored_id_when_auth_returns_null(): void
+    public function test_actor_can_clear_stored_id(): void
     {
+        Actor::set(42);
+        Actor::clear();
+
+        $this->assertNull(Actor::id());
+    }
+
+    public function test_actor_prefers_auth_id_over_stored_id(): void
+    {
+        // Set actor
         Actor::set(99);
 
-        // Mock Auth to return null
+        // Mock auth to return different ID
+        Auth::shouldReceive('id')->andReturn(42);
+
+        // Auth should take precedence
+        $this->assertEquals(42, Actor::id());
+    }
+
+    public function test_actor_uses_stored_id_when_auth_returns_null(): void
+    {
+        Actor::set(99);
         Auth::shouldReceive('id')->andReturn(null);
 
         $this->assertEquals(99, Actor::id());
     }
 
-    public function test_actor_clear_removes_stored_id(): void
+    public function test_actor_set_null_removes_stored_id(): void
     {
-        // Mock Auth to return null
-        Auth::shouldReceive('id')->andReturn(null);
-
         Actor::set(42);
-
         $this->assertEquals(42, Actor::id());
 
-        Actor::clear();
-
-        $this->assertNull(Actor::id());
-    }
-
-    public function test_actor_set_can_accept_null(): void
-    {
-        // Mock Auth to return null
-        Auth::shouldReceive('id')->andReturn(null);
-
-        Actor::set(42);
         Actor::set(null);
-
         $this->assertNull(Actor::id());
     }
 
-    public function test_actor_set_overrides_previous_value(): void
+    public function test_actor_isolation_between_test_runs(): void
     {
-        // Mock Auth to return null
-        Auth::shouldReceive('id')->andReturn(null);
+        // First run
+        Actor::set(1);
+        $this->assertEquals(1, Actor::id());
+        
+        // Clear (simulating end of request)
+        Actor::clear();
+        
+        // Second run (simulating new request)
+        Actor::set(2);
+        $this->assertEquals(2, Actor::id());
+        
+        // Verify first value is gone
+        Actor::clear();
+        Actor::set(2);
+        $this->assertEquals(2, Actor::id());
+        $this->assertNotEquals(1, Actor::id());
+    }
 
+    public function test_multiple_sets_override_previous_value(): void
+    {
         Actor::set(1);
         $this->assertEquals(1, Actor::id());
 
         Actor::set(2);
         $this->assertEquals(2, Actor::id());
-    }
 
-    public function test_actor_persists_across_multiple_calls(): void
-    {
-        // Mock Auth to return null
-        Auth::shouldReceive('id')->andReturn(null);
-
-        Actor::set(123);
-
-        $this->assertEquals(123, Actor::id());
-        $this->assertEquals(123, Actor::id());
-        $this->assertEquals(123, Actor::id());
-    }
-
-    public function test_actor_works_with_string_ids(): void
-    {
-        // Mock Auth to return null
-        Auth::shouldReceive('id')->andReturn(null);
-
-        // Some systems might use UUIDs or other string-based IDs
-        // Though the type hint is int, test the behavior
-        Actor::set(999);
-
-        $this->assertEquals(999, Actor::id());
+        Actor::set(3);
+        $this->assertEquals(3, Actor::id());
     }
 }

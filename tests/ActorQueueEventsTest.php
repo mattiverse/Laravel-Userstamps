@@ -35,7 +35,6 @@ class ActorQueueEventsTest extends TestCase
         ]);
 
         $event = new JobProcessing('redis', $job);
-        
         $listener = new JobProcessingListener();
         $listener->handle($event);
 
@@ -48,7 +47,6 @@ class ActorQueueEventsTest extends TestCase
         $job->method('payload')->willReturn([]);
 
         $event = new JobProcessing('redis', $job);
-        
         $listener = new JobProcessingListener();
         $listener->handle($event);
 
@@ -62,7 +60,6 @@ class ActorQueueEventsTest extends TestCase
 
         $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
         $event = new JobProcessed('redis', $job);
-        
         $listener = new JobProcessedListener();
         $listener->handle($event);
 

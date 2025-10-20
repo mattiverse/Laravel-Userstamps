@@ -83,7 +83,6 @@ class ActorQueueEventsTest extends TestCase
         // Simulate job starting (JobProcessing event)
         $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
         $job->method('payload')->willReturn($payload);
-        
         $processingEvent = new JobProcessing('redis', $job);
         (new JobProcessingListener())->handle($processingEvent);
 

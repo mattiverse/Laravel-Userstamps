@@ -6,7 +6,7 @@ use Orchestra\Testbench\TestCase;
 
 class ActorTest extends TestCase
 {
-protected function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         Actor::clear();
@@ -72,14 +72,14 @@ protected function setUp(): void
         // First run
         Actor::set(1);
         $this->assertEquals(1, Actor::id());
-        
+
         // Clear (simulating end of request)
         Actor::clear();
-        
+
         // Second run (simulating new request)
         Actor::set(2);
         $this->assertEquals(2, Actor::id());
-        
+
         // Verify first value is gone
         Actor::clear();
         Actor::set(2);

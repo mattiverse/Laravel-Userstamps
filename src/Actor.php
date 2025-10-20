@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 final class Actor
 {
     /**
-     * Container key for storing actor ID
+     * Container key for storing actor ID.
      */
     private const CONTAINER_KEY = 'userstamps.actor_id';
 
@@ -49,8 +49,8 @@ final class Actor
         }
 
         // Fall back to container value
-        return app()->has(self::CONTAINER_KEY) 
-            ? app()->make(self::CONTAINER_KEY) 
+        return app()->has(self::CONTAINER_KEY)
+            ? app()->make(self::CONTAINER_KEY)
             : null;
     }
 

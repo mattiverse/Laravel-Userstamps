@@ -1,16 +1,22 @@
 <?php
 
+use Illuminate\Queue\Events\JobProcessed;
+use Illuminate\Queue\Events\JobProcessing;
 use Mattiverse\Userstamps\Actor;
+use Mattiverse\Userstamps\Listeners\Queue\JobProcessed as JobProcessedListener;
+use Mattiverse\Userstamps\Listeners\Queue\JobProcessing as JobProcessingListener;
 use Orchestra\Testbench\TestCase;
 
-class ActorQueueIsolationTest extends TestCase
+class ActorQueueEventsTest extends TestCase
 {
+    protected function getPackageProviders($app)
+    {
+        return ['Mattiverse\Userstamps\UserstampsServiceProvider'];
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
-        
-        // Simulate fresh container for each test (like a new request/job)
-        $this->app = $this->createApplication();
         Actor::clear();
     }
 
@@ -20,33 +26,77 @@ class ActorQueueIsolationTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_actor_does_not_leak_between_simulated_jobs(): void
+    public function test_job_processing_listener_sets_actor_from_payload(): void
     {
-        // Job 1
-        Actor::set(10);
-        $job1Value = Actor::id();
-        $this->assertEquals(10, $job1Value);
-        Actor::clear();
+        $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
+        $job->method('payload')->willReturn([
+            'userstamps_actor_id' => 42,
+        ]);
 
-        // Job 2 - should NOT see Job 1's value
-        $job2Value = Actor::id();
-        $this->assertNull($job2Value);
-        
-        Actor::set(20);
-        $this->assertEquals(20, Actor::id());
+        $event = new JobProcessing('redis', $job);
+
+        $listener = new JobProcessingListener();
+        $listener->handle($event);
+
+        $this->assertEquals(42, Actor::id());
     }
 
-    public function test_container_is_scoped_per_application_instance(): void
+    public function test_job_processing_listener_handles_missing_actor_id(): void
     {
-        // Set in current app instance
+        $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
+        $job->method('payload')->willReturn([]);
+
+        $event = new JobProcessing('redis', $job);
+
+        $listener = new JobProcessingListener();
+        $listener->handle($event);
+
+        $this->assertNull(Actor::id());
+    }
+
+    public function test_job_processed_listener_clears_actor(): void
+    {
         Actor::set(42);
         $this->assertEquals(42, Actor::id());
 
-        // Create new app instance (simulates new request)
-        $newApp = $this->createApplication();
-        $this->app = $newApp;
+        $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
+        $event = new JobProcessed('redis', $job);
 
-        // Should be clean slate
+        $listener = new JobProcessedListener();
+        $listener->handle($event);
+
+        $this->assertNull(Actor::id());
+    }
+
+    public function test_full_queue_lifecycle(): void
+    {
+        // Simulate job being queued with actor ID
+        Actor::set(100);
+        $actorIdWhenQueued = Actor::id();
+        $this->assertEquals(100, $actorIdWhenQueued);
+
+        // Simulate queue payload
+        $payload = ['userstamps_actor_id' => $actorIdWhenQueued];
+
+        // Clear (simulates end of web request)
+        Actor::clear();
+        $this->assertNull(Actor::id());
+
+        // Simulate job starting (JobProcessing event)
+        $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
+        $job->method('payload')->willReturn($payload);
+
+        $processingEvent = new JobProcessing('redis', $job);
+        (new JobProcessingListener())->handle($processingEvent);
+
+        // Actor should be restored
+        $this->assertEquals(100, Actor::id());
+
+        // Simulate job completion (JobProcessed event)
+        $processedEvent = new JobProcessed('redis', $job);
+        (new JobProcessedListener())->handle($processedEvent);
+
+        // Actor should be cleared
         $this->assertNull(Actor::id());
     }
 }

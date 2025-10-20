@@ -301,12 +301,9 @@ All tests pass:
 
 ```bash
 # Run all new tests
-vendor/bin/phpunit tests/ActorTest.php                          # ✅ 10/10
-vendor/bin/phpunit tests/QueueUserstampsTest.php                # ✅ 8/8
-vendor/bin/phpunit tests/Listeners/Queue/JobProcessingTest.php  # ✅ 6/6
-vendor/bin/phpunit tests/Listeners/Queue/JobProcessedTest.php   # ✅ 5/5
+vendor/bin/phpunit tests/ActorTest.php tests/Listeners/ tests/QueueUserstampsTest.php
 
-# Total: 29 tests, 41+ assertions, 100% passing
+# Results: ✅ 29 tests, 58 assertions, 100% passing
 ```
 
 **Test Coverage:**
@@ -332,11 +329,7 @@ All features are fully documented:
 
 ### Developer Documentation  
 - **CHANGELOG.md** - Complete changelog entry
-- **TESTING.md** - How to run and write tests
-- **TEST_SUMMARY.md** - Test suite overview
 - **INTEGRATION_SUMMARY.md** - Integration guide
-- **QUEUE_ARCHITECTURE.md** - Architecture and design decisions
-- **TEST_RESULTS.md** - Test results and setup
 
 ### Code Documentation
 - Comprehensive PHPDoc blocks

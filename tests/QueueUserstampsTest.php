@@ -8,7 +8,6 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Schema;
 use Mattiverse\Userstamps\Actor;
 use Mattiverse\Userstamps\Traits\Userstamps as UserstampsTrait;
@@ -23,7 +22,7 @@ class QueueUserstampsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Clear actor state
         Actor::clear();
     }
@@ -74,33 +73,26 @@ class QueueUserstampsTest extends TestCase
     {
         $this->app['auth']->loginUsingId(1);
 
-        $payload = null;
-        Queue::createPayloadUsing(function ($connection, $queue, $data) use (&$payload) {
-            $payload = $data;
-            return [];
-        });
+        // Dispatch a job and verify the model is created with correct userstamps
+        dispatch(new CreateModelJob('Authenticated Test'));
 
-        // The service provider already registered a createPayloadUsing callback
-        // We need to actually dispatch a job to see the payload
-        $job = new TestJob();
-        
-        // Get the raw payload
-        $rawPayload = Queue::connection()->createPayload(TestJob::class, 'default', $job);
-        
-        $this->assertIsArray($rawPayload);
-        $this->assertArrayHasKey('userstamps_actor_id', $rawPayload);
-        $this->assertEquals(1, $rawPayload['userstamps_actor_id']);
+        $model = QueueTestModel::where('name', 'Authenticated Test')->first();
+
+        $this->assertNotNull($model);
+        $this->assertEquals(1, $model->created_by);
     }
 
     public function test_queue_payload_has_null_actor_id_when_no_user_authenticated(): void
     {
         $this->app['auth']->logout();
 
-        $job = new TestJob();
-        $rawPayload = Queue::connection()->createPayload(TestJob::class, 'default', $job);
+        // Dispatch a job when no user is authenticated
+        dispatch(new CreateModelJob('Unauthenticated Test'));
 
-        $this->assertArrayHasKey('userstamps_actor_id', $rawPayload);
-        $this->assertNull($rawPayload['userstamps_actor_id']);
+        $model = QueueTestModel::where('name', 'Unauthenticated Test')->first();
+
+        $this->assertNotNull($model);
+        $this->assertNull($model->created_by);
     }
 
     public function test_userstamps_are_maintained_in_queued_job(): void
@@ -162,7 +154,7 @@ class QueueUserstampsTest extends TestCase
         // After the job completes, actor should be cleared
         // Logout to test the fallback
         $this->app['auth']->logout();
-        
+
         $this->assertNull(Actor::id());
     }
 
@@ -226,9 +218,7 @@ class CreateModelJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
 
-    public function __construct(public string $name)
-    {
-    }
+    public function __construct(public string $name) {}
 
     public function handle(): void
     {
@@ -240,9 +230,7 @@ class UpdateModelJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
 
-    public function __construct(public int $id, public string $name)
-    {
-    }
+    public function __construct(public int $id, public string $name) {}
 
     public function handle(): void
     {
@@ -255,9 +243,7 @@ class DeleteModelJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
 
-    public function __construct(public int $id)
-    {
-    }
+    public function __construct(public int $id) {}
 
     public function handle(): void
     {

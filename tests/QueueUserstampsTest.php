@@ -194,13 +194,16 @@ class QueueTestModel extends Model
     use SoftDeletes, UserstampsTrait;
 
     protected $table = 'queue_test_models';
+
     protected $guarded = [];
 }
 
 class QueueTestUser extends Authenticatable
 {
     public $timestamps = false;
+
     protected $table = 'users';
+
     protected $guarded = [];
 }
 

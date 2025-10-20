@@ -17,7 +17,7 @@ class JobProcessingTest extends TestCase
 
     public function test_handle_sets_actor_from_job_payload(): void
     {
-        $listener = new JobProcessing();
+        $listener = new JobProcessing;
 
         $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
         $job->method('payload')->willReturn([
@@ -36,7 +36,7 @@ class JobProcessingTest extends TestCase
         // First set an actor to ensure it gets overwritten
         Actor::set(99);
 
-        $listener = new JobProcessing();
+        $listener = new JobProcessing;
 
         $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
         $job->method('payload')->willReturn([
@@ -55,7 +55,7 @@ class JobProcessingTest extends TestCase
         // First set an actor
         Actor::set(99);
 
-        $listener = new JobProcessing();
+        $listener = new JobProcessing;
 
         $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
         $job->method('payload')->willReturn([
@@ -71,7 +71,7 @@ class JobProcessingTest extends TestCase
 
     public function test_handle_extracts_payload_from_event_job(): void
     {
-        $listener = new JobProcessing();
+        $listener = new JobProcessing;
 
         $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
 
@@ -91,7 +91,7 @@ class JobProcessingTest extends TestCase
     {
         Actor::set(1);
 
-        $listener = new JobProcessing();
+        $listener = new JobProcessing;
 
         $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
         $job->method('payload')->willReturn([
@@ -107,7 +107,7 @@ class JobProcessingTest extends TestCase
 
     public function test_handle_accepts_different_user_ids(): void
     {
-        $listener = new JobProcessing();
+        $listener = new JobProcessing;
 
         $testIds = [1, 999, 12345, 0];
 

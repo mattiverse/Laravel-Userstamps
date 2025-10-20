@@ -52,7 +52,7 @@ class UserstampsServiceProvider extends ServiceProvider
     protected function registerQueueSupport(): void
     {
         // Add the current user ID into every queued job payload
-        Queue::createPayloadUsing(fn($connection, $queue, $payload) => [
+        Queue::createPayloadUsing(fn ($connection, $queue, $payload) => [
             'userstamps_actor_id' => Actor::id(),
         ]);
 

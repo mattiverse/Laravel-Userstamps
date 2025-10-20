@@ -12,9 +12,6 @@ class JobProcessed
      *
      * Clears the actor ID after the job has been processed.
      * This ensures the actor context doesn't leak between jobs.
-     *
-     * @param JobProcessedEvent $event
-     * @return void
      */
     public function handle(JobProcessedEvent $event): void
     {

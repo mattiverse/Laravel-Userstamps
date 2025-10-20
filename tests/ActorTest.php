@@ -68,6 +68,7 @@ class ActorTest extends TestCase
 
         $this->assertEquals(99, Actor::id());
     }
+
     public function test_actor_clear_removes_stored_id(): void
     {
         // Mock Auth to return null

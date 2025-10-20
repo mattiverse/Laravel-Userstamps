@@ -21,7 +21,7 @@ class JobProcessedTest extends TestCase
         Actor::set(42);
         $this->assertEquals(42, Actor::id());
 
-        $listener = new JobProcessed();
+        $listener = new JobProcessed;
 
         $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
         $event = new JobProcessedEvent('connection', $job);
@@ -36,7 +36,7 @@ class JobProcessedTest extends TestCase
         // Actor is already null
         $this->assertNull(Actor::id());
 
-        $listener = new JobProcessed();
+        $listener = new JobProcessed;
 
         $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
         $event = new JobProcessedEvent('connection', $job);
@@ -49,7 +49,7 @@ class JobProcessedTest extends TestCase
 
     public function test_handle_is_called_with_proper_event_instance(): void
     {
-        $listener = new JobProcessed();
+        $listener = new JobProcessed;
 
         $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
         $event = new JobProcessedEvent('connection', $job);
@@ -62,7 +62,7 @@ class JobProcessedTest extends TestCase
 
     public function test_handle_clears_various_actor_values(): void
     {
-        $listener = new JobProcessed();
+        $listener = new JobProcessed;
         $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
         $event = new JobProcessedEvent('connection', $job);
 
@@ -84,7 +84,7 @@ class JobProcessedTest extends TestCase
         Actor::set(1);
         $this->assertEquals(1, Actor::id());
 
-        $listener = new JobProcessed();
+        $listener = new JobProcessed;
         $job = $this->createMock(\Illuminate\Contracts\Queue\Job::class);
         $event = new JobProcessedEvent('connection', $job);
 

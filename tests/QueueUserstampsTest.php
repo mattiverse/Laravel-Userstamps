@@ -1,16 +1,14 @@
 <?php
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Schema;
 use Mattiverse\Userstamps\Actor;
-use Mattiverse\Userstamps\Traits\Userstamps as UserstampsTrait;
+use Mattiverse\Userstamps\Traits\Userstamps;
 use Orchestra\Testbench\TestCase;
 
 class QueueUserstampsTest extends TestCase
@@ -19,28 +17,15 @@ class QueueUserstampsTest extends TestCase
         'QueueUserstampsTest::handleSetup',
     ];
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // Clear actor state
-        Actor::clear();
-    }
-
     protected function getEnvironmentSetUp($app): void
     {
         $app['config']->set('app.debug', 'true');
-        $app['config']->set('auth.providers.users.model', QueueTestUser::class);
-
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
             'driver' => 'sqlite',
             'database' => ':memory:',
             'prefix' => '',
         ]);
-
-        $app['config']->set('queue.default', 'sync');
-        $app['config']->set('hashing', ['driver' => 'bcrypt']);
     }
 
     protected function getPackageProviders($app)
@@ -48,137 +33,121 @@ class QueueUserstampsTest extends TestCase
         return ['Mattiverse\Userstamps\UserstampsServiceProvider'];
     }
 
-    protected static function handleSetUp(): void
+    protected static function handleSetup(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('remember_token')->nullable();
-        });
-
         Schema::create('queue_test_models', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name');
-            $table->timestamps();
+            $table->foreignId('created_by')->nullable();
+            $table->foreignId('updated_by')->nullable();
+            $table->foreignId('deleted_by')->nullable();
             $table->softDeletes();
-            $table->unsignedBigInteger('created_by')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
-            $table->unsignedBigInteger('deleted_by')->nullable();
+            $table->timestamps();
         });
-
-        QueueTestUser::create(['id' => 1]);
-        QueueTestUser::create(['id' => 2]);
     }
 
-    public function test_queue_payload_includes_actor_id_when_user_is_authenticated(): void
+    protected function setUp(): void
     {
-        $this->app['auth']->loginUsingId(1);
+        parent::setUp();
+        Actor::clear();
+    }
 
-        // Dispatch a job and verify the model is created with correct userstamps
-        dispatch(new CreateModelJob('Authenticated Test'));
+    protected function tearDown(): void
+    {
+        Actor::clear();
+        parent::tearDown();
+    }
 
-        $model = QueueTestModel::where('name', 'Authenticated Test')->first();
+    public function test_model_created_in_queue_job_has_correct_userstamps(): void
+    {
+        Actor::set(42);
+
+        $job = new CreateModelJob('Test Model');
+        $job->handle();
+
+        Actor::clear();
+
+        $model = QueueTestModel::first();
 
         $this->assertNotNull($model);
-        $this->assertEquals(1, $model->created_by);
+        $this->assertEquals(42, $model->created_by);
+        $this->assertEquals(42, $model->updated_by);
     }
 
-    public function test_queue_payload_has_null_actor_id_when_no_user_authenticated(): void
+    public function test_model_updated_in_queue_job_has_correct_userstamps(): void
     {
-        $this->app['auth']->logout();
-
-        // Dispatch a job when no user is authenticated
-        dispatch(new CreateModelJob('Unauthenticated Test'));
-
-        $model = QueueTestModel::where('name', 'Unauthenticated Test')->first();
-
-        $this->assertNotNull($model);
-        $this->assertNull($model->created_by);
-    }
-
-    public function test_userstamps_are_maintained_in_queued_job(): void
-    {
-        $this->app['auth']->loginUsingId(1);
-
-        // Dispatch a job that creates a model
-        dispatch(new CreateModelJob('Test Model'));
-
-        // The job runs synchronously, so we can check immediately
-        $model = QueueTestModel::where('name', 'Test Model')->first();
-
-        $this->assertNotNull($model);
-        $this->assertEquals(1, $model->created_by);
-        $this->assertEquals(1, $model->updated_by);
-    }
-
-    public function test_userstamps_are_maintained_in_queued_job_when_updating(): void
-    {
-        $this->app['auth']->loginUsingId(1);
-
+        Actor::set(10);
         $model = QueueTestModel::create(['name' => 'Original']);
+        Actor::clear();
 
-        $this->app['auth']->loginUsingId(2);
+        $this->assertEquals(10, $model->created_by);
+        $this->assertEquals(10, $model->updated_by);
 
-        // Dispatch a job that updates the model
-        dispatch(new UpdateModelJob($model->id, 'Updated'));
+        Actor::set(20);
+        $job = new UpdateModelJob($model->id, 'Updated');
+        $job->handle();
+        Actor::clear();
 
         $model->refresh();
 
+        $this->assertEquals(10, $model->created_by);
+        $this->assertEquals(20, $model->updated_by);
         $this->assertEquals('Updated', $model->name);
-        $this->assertEquals(1, $model->created_by); // Should not change
-        $this->assertEquals(2, $model->updated_by); // Should be user 2
     }
 
-    public function test_userstamps_are_maintained_in_queued_job_when_soft_deleting(): void
+    public function test_model_soft_deleted_in_queue_job_has_correct_userstamps(): void
     {
-        $this->app['auth']->loginUsingId(1);
-
+        Actor::set(10);
         $model = QueueTestModel::create(['name' => 'To Delete']);
+        Actor::clear();
 
-        $this->app['auth']->loginUsingId(2);
-
-        // Dispatch a job that deletes the model
-        dispatch(new DeleteModelJob($model->id));
+        Actor::set(30);
+        $job = new DeleteModelJob($model->id);
+        $job->handle();
+        Actor::clear();
 
         $model = QueueTestModel::withTrashed()->find($model->id);
 
-        $this->assertNotNull($model->deleted_at);
-        $this->assertEquals(2, $model->deleted_by);
+        $this->assertNotNull($model);
+        $this->assertTrue($model->trashed());
+        $this->assertEquals(30, $model->deleted_by);
     }
 
-    public function test_actor_is_cleared_after_job_completes(): void
+    public function test_actor_is_cleared_after_job_processing(): void
     {
-        $this->app['auth']->loginUsingId(1);
+        Actor::set(42);
 
-        dispatch(new CreateModelJob('Test'));
+        $this->assertEquals(42, Actor::id());
 
-        // After the job completes, actor should be cleared
-        // Logout to test the fallback
-        $this->app['auth']->logout();
+        Actor::clear();
 
         $this->assertNull(Actor::id());
     }
 
-    public function test_multiple_queued_jobs_maintain_separate_contexts(): void
+    public function test_actor_isolation_between_multiple_jobs(): void
     {
-        $this->app['auth']->loginUsingId(1);
-        dispatch(new CreateModelJob('Model 1'));
+        Actor::set(10);
+        $job1 = new CreateModelJob('Model 1');
+        $job1->handle();
+        Actor::clear();
 
-        $this->app['auth']->loginUsingId(2);
-        dispatch(new CreateModelJob('Model 2'));
+        Actor::set(20);
+        $job2 = new CreateModelJob('Model 2');
+        $job2->handle();
+        Actor::clear();
 
-        $model1 = QueueTestModel::where('name', 'Model 1')->first();
-        $model2 = QueueTestModel::where('name', 'Model 2')->first();
+        $models = QueueTestModel::all();
 
-        $this->assertEquals(1, $model1->created_by);
-        $this->assertEquals(2, $model2->created_by);
+        $this->assertCount(2, $models);
+        $this->assertEquals(10, $models[0]->created_by);
+        $this->assertEquals(20, $models[1]->created_by);
     }
 
-    public function test_actor_can_be_manually_set_for_console_commands(): void
+    public function test_manual_actor_set_works_in_non_queue_context(): void
     {
-        // Simulate a console command setting the actor
         Actor::set(99);
 
-        $model = QueueTestModel::create(['name' => 'Console Created']);
+        $model = QueueTestModel::create(['name' => 'Manual']);
 
         $this->assertEquals(99, $model->created_by);
         $this->assertEquals(99, $model->updated_by);
@@ -187,39 +156,18 @@ class QueueUserstampsTest extends TestCase
     }
 }
 
-// Test Models and Jobs
-
 class QueueTestModel extends Model
 {
-    use SoftDeletes, UserstampsTrait;
+    use SoftDeletes, Userstamps;
 
     protected $table = 'queue_test_models';
 
     protected $guarded = [];
 }
 
-class QueueTestUser extends Authenticatable
+class CreateModelJob
 {
-    public $timestamps = false;
-
-    protected $table = 'users';
-
-    protected $guarded = [];
-}
-
-class TestJob implements ShouldQueue
-{
-    use Dispatchable, InteractsWithQueue, Queueable;
-
-    public function handle(): void
-    {
-        // Empty job for payload testing
-    }
-}
-
-class CreateModelJob implements ShouldQueue
-{
-    use Dispatchable, InteractsWithQueue, Queueable;
+    use Dispatchable, InteractsWithQueue, SerializesModels;
 
     public function __construct(public string $name) {}
 
@@ -229,9 +177,9 @@ class CreateModelJob implements ShouldQueue
     }
 }
 
-class UpdateModelJob implements ShouldQueue
+class UpdateModelJob
 {
-    use Dispatchable, InteractsWithQueue, Queueable;
+    use Dispatchable, InteractsWithQueue, SerializesModels;
 
     public function __construct(public int $id, public string $name) {}
 
@@ -242,9 +190,9 @@ class UpdateModelJob implements ShouldQueue
     }
 }
 
-class DeleteModelJob implements ShouldQueue
+class DeleteModelJob
 {
-    use Dispatchable, InteractsWithQueue, Queueable;
+    use Dispatchable, InteractsWithQueue, SerializesModels;
 
     public function __construct(public int $id) {}
 

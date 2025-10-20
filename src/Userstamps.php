@@ -2,8 +2,6 @@
 
 namespace Mattiverse\Userstamps;
 
-use Illuminate\Support\Facades\Auth;
-
 class Userstamps
 {
     /**
@@ -18,6 +16,6 @@ class Userstamps
 
     public static function getUserId(): mixed
     {
-        return is_null(static::$resolveUsingCallback) ? Auth::id() : (static::$resolveUsingCallback)();
+        return is_null(static::$resolveUsingCallback) ? Actor::id() : (static::$resolveUsingCallback)();
     }
 }

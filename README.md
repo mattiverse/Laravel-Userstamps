@@ -41,6 +41,13 @@ $table->userstamps();
 $table->userstampSoftDeletes();
 ```
 
+To remove userstamp columns in a migration, you can use:
+
+```php
+$table->dropUserstamps();
+$table->dropUserstampSoftDeletes();
+```
+
 You can now load the trait within your model, and userstamps will automatically be maintained:
 
 ```php
@@ -99,6 +106,33 @@ Userstamps::resolveUsing(
 ```
 
 The `Userstamps::resolveUsing` method is likely best suited to the `boot` method of `AppServiceProvider`.
+
+### Queue Support
+
+When models are created, updated, or deleted within queued jobs, the authenticated user is typically not available. This package automatically handles this scenario by preserving the user context across queue boundaries.
+
+The user ID is automatically embedded in the job payload when the job is dispatched, and restored when the job is processed. This ensures userstamps are correctly maintained even in background jobs.
+
+**No additional configuration is required** - queue support is enabled automatically.
+
+#### Manual Actor Management
+
+In advanced scenarios where you need to manually control the user context (e.g., console commands, custom workers), you can use the `Actor` class:
+
+```php
+use Mattiverse\Userstamps\Actor;
+
+// Set a specific user ID
+Actor::set($userId);
+
+// Your operations that need userstamps
+$model->save();
+
+// Clear the actor when done
+Actor::clear();
+```
+
+The `Actor` class provides a fallback mechanism that works alongside the standard authentication system. When `Auth::id()` returns `null`, the manually set actor ID will be used instead.
 
 ## Workarounds
 

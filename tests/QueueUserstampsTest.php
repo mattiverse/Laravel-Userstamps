@@ -207,5 +207,4 @@ class DeleteModelJob
         $model = QueueTestModel::find($this->id);
         $model->delete();
     }
-    
 }

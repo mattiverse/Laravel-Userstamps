@@ -3,7 +3,6 @@
 namespace Mattiverse\Userstamps\Traits;
 
 use Illuminate\Support\Str;
-
 use Mattiverse\Userstamps\Userstamps;
 
 trait UuidManager

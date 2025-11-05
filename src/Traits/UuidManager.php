@@ -2,9 +2,9 @@
 
 namespace Mattiverse\Userstamps\Traits;
 
-use Mattiverse\Userstamps\Userstamps;
-
 use Illuminate\Support\Str;
+
+use Mattiverse\Userstamps\Userstamps;
 
 trait UuidManager
 {

@@ -6,9 +6,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Schema;
 use Mattiverse\Userstamps\Traits\Userstamps as UserstampsTrait;
+use Mattiverse\Userstamps\Traits\UuidManager as UuidManagerTrait;
 use Mattiverse\Userstamps\Userstamps;
 use Orchestra\Testbench\TestCase;
-use Mattiverse\Userstamps\Traits\UuidManager;
 
 class UserstampsUuidTest extends TestCase
 {
@@ -60,7 +60,7 @@ class UserstampsUuidTest extends TestCase
     protected function createPost(): Post
     {
         return Post::create([
-            'id' => UuidManager::generateUUID(),
+            'id' => UuidManagerTrait::generateUUID(),
             'title' => 'news',
         ]);
     }
@@ -68,7 +68,7 @@ class UserstampsUuidTest extends TestCase
     protected function createPostWithSoftDeletes(): PostWithSoftDeletes
     {
         return PostWithSoftDeletes::create([
-            'id' => UuidManager::generateUUID(),
+            'id' => UuidManagerTrait::generateUUID(),
             'title' => 'sports',
         ]);
     }
@@ -76,7 +76,7 @@ class UserstampsUuidTest extends TestCase
     protected function createPostWithCustomColumnNames(): PostWithCustomColumnNames
     {
         return PostWithCustomColumnNames::create([
-            'id' => UuidManager::generateUUID(),
+            'id' => UuidManagerTrait::generateUUID(),
             'title' => 'politics',
         ]);
     }
@@ -84,7 +84,7 @@ class UserstampsUuidTest extends TestCase
     protected function createPostWithNullColumnNames(): PostWithNullColumnNames
     {
         return PostWithNullColumnNames::create([
-            'id' => UuidManager::generateUUID(),
+            'id' => UuidManagerTrait::generateUUID(),
             'title' => 'Programming',
         ]);
     }
@@ -92,7 +92,7 @@ class UserstampsUuidTest extends TestCase
     protected function createTestUuidUser(): TestUUIDUser
     {
         return TestUUIDUser::create([
-            'id' => UuidManager::generateUUID(),
+            'id' => UuidManagerTrait::generateUUID(),
         ]);
     }
 
@@ -175,7 +175,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $post = $this->createPost();
 
@@ -200,7 +200,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $post = $this->createPost();
 
@@ -208,7 +208,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($anotherUser);
 
-        UuidManager::resolveAuthenticatedUserId($anotherUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($anotherUser);
 
         $post->update([
             'title' => 'changed title',
@@ -223,7 +223,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $post = $this->createPost();
 
@@ -231,7 +231,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($anotherUser);
 
-        UuidManager::resolveAuthenticatedUserId($anotherUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($anotherUser);
 
         $post->update([
             'title' => 'changed title',
@@ -240,13 +240,13 @@ class UserstampsUuidTest extends TestCase
         $this->assertEquals($anotherUser->id, $post->updated_by);
     }
 
-    public function  test_updated_by_is_not_changed_when_user_is_not_present(): void
+    public function test_updated_by_is_not_changed_when_user_is_not_present(): void
     {
         $createdUser = $this->createTestUuidUser();
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $post = $this->createPost();
 
@@ -265,7 +265,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $post = $this->createPostWithSoftDeletes();
 
@@ -294,7 +294,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $post = $this->createPostWithSoftDeletes();
 
@@ -310,7 +310,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $post = $this->createPostWithSoftDeletes();
 
@@ -318,7 +318,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($anotherUser);
 
-        UuidManager::resolveAuthenticatedUserId($anotherUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($anotherUser);
 
         $post->delete();
 
@@ -332,7 +332,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $post = $this->createPostWithCustomColumnNames();
 
@@ -345,7 +345,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($anotherUser);
 
-        UuidManager::resolveAuthenticatedUserId($anotherUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($anotherUser);
 
         $post->update([
             'title' => 'title changed',
@@ -369,7 +369,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $post = $this->createPostWithNullColumnNames();
 
@@ -380,7 +380,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($anotherUser);
 
-        UuidManager::resolveAuthenticatedUserId($anotherUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($anotherUser);
 
         $post->update([
             'title' => 'title changed',
@@ -402,7 +402,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $post = $this->createPostWithSoftDeletes();
         $post->stopUserstamping();
@@ -411,7 +411,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($anotherUser);
 
-        UuidManager::resolveAuthenticatedUserId($anotherUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($anotherUser);
 
         $post->update([
             'title' => 'title changed',
@@ -430,7 +430,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $post = $this->createPostWithSoftDeletes();
         $post->stopUserstamping();
@@ -440,7 +440,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($anotherUser);
 
-        UuidManager::resolveAuthenticatedUserId($anotherUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($anotherUser);
 
         $post->update([
             'title' => 'title changed',
@@ -493,7 +493,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $this->createPost();
 
@@ -501,7 +501,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($anotherUser);
 
-        UuidManager::resolveAuthenticatedUserId($anotherUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($anotherUser);
 
         Post::where('title', 'politics')->updateWithUserstamps([
             'title' => 'Laravel',
@@ -516,7 +516,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $this->createPostWithSoftDeletes();
 
@@ -524,7 +524,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($anotherUser);
 
-        UuidManager::resolveAuthenticatedUserId($anotherUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($anotherUser);
 
         PostWithSoftDeletes::where('title', 'sports')->deleteWithUserstamps();
 
@@ -539,7 +539,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $post = $this->createPostWithSoftDeletes();
 
@@ -547,7 +547,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($anotherUser);
 
-        UuidManager::resolveAuthenticatedUserId($anotherUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($anotherUser);
 
         PostWithSoftDeletes::where('title', 'sports')->deleteWithUserstamps();
 
@@ -563,7 +563,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($createdUser);
 
-        UuidManager::resolveAuthenticatedUserId($createdUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($createdUser);
 
         $this->createPostWithCustomColumnNames();
 
@@ -571,7 +571,7 @@ class UserstampsUuidTest extends TestCase
 
         $this->app['auth']->login($anotherUser);
 
-        UuidManager::resolveAuthenticatedUserId($anotherUser);
+        UuidManagerTrait::resolveAuthenticatedUserId($anotherUser);
 
         PostWithCustomColumnNames::where('title', 'politics')->updateWithUserstamps([
             'title' => 'politics changed',
@@ -589,7 +589,7 @@ class UserstampsUuidTest extends TestCase
 
     public function test_values_are_overridden_when_using_resolve_callback(): void
     {
-        Userstamps::resolveUsing(fn() => 'bar');
+        Userstamps::resolveUsing(fn () => 'bar');
 
         $createdUser = $this->createTestUuidUser();
 
@@ -618,9 +618,9 @@ class Post extends Model
 
     protected $primaryKey = 'id';
 
-    public $incrementing  = false;
+    public $incrementing = false;
 
-    protected $keyType    = 'string';
+    protected $keyType = 'string';
 }
 
 class PostWithSoftDeletes extends Model
@@ -633,9 +633,9 @@ class PostWithSoftDeletes extends Model
 
     protected $primaryKey = 'id';
 
-    public $incrementing  = false;
+    public $incrementing = false;
 
-    protected $keyType    = 'string';
+    protected $keyType = 'string';
 }
 
 class PostWithCustomColumnNames extends Model
@@ -654,9 +654,9 @@ class PostWithCustomColumnNames extends Model
 
     protected $primaryKey = 'id';
 
-    public $incrementing  = false;
+    public $incrementing = false;
 
-    protected $keyType    = 'string';
+    protected $keyType = 'string';
 }
 
 class PostWithNullColumnNames extends Model
@@ -675,9 +675,9 @@ class PostWithNullColumnNames extends Model
 
     protected $primaryKey = 'id';
 
-    public $incrementing  = false;
+    public $incrementing = false;
 
-    protected $keyType    = 'string';
+    protected $keyType = 'string';
 }
 
 class TestUUIDUser extends Authenticatable
@@ -688,9 +688,9 @@ class TestUUIDUser extends Authenticatable
 
     protected $guarded = [];
 
-    public $incrementing  = false;
+    public $incrementing = false;
 
-    protected $keyType    = 'string';
+    protected $keyType = 'string';
 
     protected $primaryKey = 'id';
 }

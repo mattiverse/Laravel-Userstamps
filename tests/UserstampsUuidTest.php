@@ -96,7 +96,7 @@ class UserstampsUuidTest extends TestCase
         ]);
     }
 
-    public function test_it_can_add_userstampsuuid_columns()
+    public function test_it_can_add_userstampsuuid_columns(): void
     {
         Schema::create('userstampable', function (Blueprint $table) {
             $table->uuid('id')->primary();
@@ -109,7 +109,7 @@ class UserstampsUuidTest extends TestCase
         $this->assertContains('updated_by', $colummns);
     }
 
-    public function test_it_can_add_userstampsuuid_soft_delete_column()
+    public function test_it_can_add_userstampsuuid_soft_delete_column(): void
     {
         Schema::create('userstampable', function (Blueprint $table) {
             $table->id();
@@ -121,7 +121,7 @@ class UserstampsUuidTest extends TestCase
         $this->assertContains('deleted_by', $colummns);
     }
 
-    public function test_it_can_add_both_userstampsuuid_columns_and_userstampsuuid_soft_delete_column()
+    public function test_it_can_add_both_userstampsuuid_columns_and_userstampsuuid_soft_delete_column(): void
     {
         Schema::create('userstampable', function (Blueprint $table) {
             $table->id();
@@ -136,7 +136,7 @@ class UserstampsUuidTest extends TestCase
         $this->assertContains('updated_by', $colummns);
     }
 
-    public function test_it_can_drop_userstampsuuid_columns()
+    public function test_it_can_drop_userstampsuuid_columns(): void
     {
         Schema::create('userstampable', function (Blueprint $table) {
             $table->id();
@@ -153,7 +153,7 @@ class UserstampsUuidTest extends TestCase
         $this->assertNotContains('updated_by', $colummns);
     }
 
-    public function test_it_can_drop_userstampsuuid_soft_delete_column()
+    public function test_it_can_drop_userstampsuuid_soft_delete_column(): void
     {
         Schema::create('userstampable', function (Blueprint $table) {
             $table->id();

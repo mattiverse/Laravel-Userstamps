@@ -30,6 +30,21 @@ class UserstampsServiceProvider extends ServiceProvider
         );
 
         Blueprint::macro(
+            'userstampsUuid',
+            function () {
+                $this->foreignUuid('created_by')->nullable();
+                $this->foreignUuid('updated_by')->nullable();
+            }
+        );
+
+        Blueprint::macro(
+            'userstampsUuidSoftDeletes',
+            function () {
+                $this->foreignUuid('deleted_by')->nullable();
+            }
+        );
+
+        Blueprint::macro(
             'dropUserstamps',
             function () {
                 $this->dropColumn('created_by', 'updated_by');
@@ -38,6 +53,20 @@ class UserstampsServiceProvider extends ServiceProvider
 
         Blueprint::macro(
             'dropUserstampSoftDeletes',
+            function () {
+                $this->dropColumn('deleted_by');
+            }
+        );
+
+        Blueprint::macro(
+            'dropUserstampUuid',
+            function () {
+                $this->dropColumn('created_by', 'updated_by');
+            }
+        );
+
+        Blueprint::macro(
+            'dropUserstampUuidSoftDeletes',
             function () {
                 $this->dropColumn('deleted_by');
             }

@@ -19,12 +19,14 @@ trait UuidManager
             Userstamps::resolveUsing(function () {
                 return '';
             });
+
             return '';
         }
 
         Userstamps::resolveUsing(function () use ($user) {
             return $user->id;
         });
+
         return $user->id;
     }
 }

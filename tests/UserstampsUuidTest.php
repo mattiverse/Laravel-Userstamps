@@ -589,7 +589,7 @@ class UserstampsUuidTest extends TestCase
 
     public function test_values_are_overridden_when_using_resolve_callback(): void
     {
-        Userstamps::resolveUsing(fn () => 'bar');
+        Userstamps::resolveUsing(fn() => 'bar');
 
         $createdUser = $this->createTestUuidUser();
 

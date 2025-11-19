@@ -465,6 +465,64 @@ class UserstampsTest extends TestCase
 
         $this->assertNotContains('deleted_by', $colummns);
     }
+
+    public function test_it_can_add_userstamps_uuid_columns(): void
+    {
+        Schema::create('userstampable', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->userstampsUuid();
+        });
+
+        $colummns = Schema::getColumnListing('userstampable');
+
+        $this->assertContains('created_by', $colummns);
+        $this->assertContains('updated_by', $colummns);
+    }
+
+    public function test_it_can_add_userstamps_uuid_soft_delete_column(): void
+    {
+        Schema::create('userstampable', function (Blueprint $table) {
+            $table->id();
+            $table->userstampsUuidSoftDeletes();
+        });
+
+        $colummns = Schema::getColumnListing('userstampable');
+
+        $this->assertContains('deleted_by', $colummns);
+    }
+
+    public function test_it_can_drop_userstamps_uuid_columns(): void
+    {
+        Schema::create('userstampable', function (Blueprint $table) {
+            $table->id();
+            $table->userstampsUuid();
+        });
+
+        Schema::table('userstampable', function (Blueprint $table) {
+            $table->dropUserstampsUuid();
+        });
+
+        $colummns = Schema::getColumnListing('userstampable');
+
+        $this->assertNotContains('created_by', $colummns);
+        $this->assertNotContains('updated_by', $colummns);
+    }
+
+    public function test_it_can_drop_userstamps_uuid_soft_delete_column(): void
+    {
+        Schema::create('userstampable', function (Blueprint $table) {
+            $table->id();
+            $table->userstampsUuidSoftDeletes();
+        });
+
+        Schema::table('userstampable', function (Blueprint $table) {
+            $table->dropUserstampsUuidSoftDeletes();
+        });
+
+        $colummns = Schema::getColumnListing('userstampable');
+
+        $this->assertNotContains('deleted_by', $colummns);
+    }
 }
 
 class Foo extends Model

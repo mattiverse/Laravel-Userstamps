@@ -41,6 +41,13 @@ $table->userstamps();
 $table->userstampSoftDeletes();
 ```
 
+Equivalent methods are also available when working with UUIDs.
+
+```php
+$table->userstampsUuid();
+$table->userstampsUuidSoftDeletes();
+```
+
 You can now load the trait within your model, and userstamps will automatically be maintained:
 
 ```php

@@ -7,6 +7,7 @@ use Mattiverse\Userstamps\UserstampsScope;
 trait Userstamps
 {
     protected bool $userstamping = true;
+    protected bool $fillUpdatedByOnCreate = true;
 
     public static function bootUserstamps(): void
     {
@@ -80,6 +81,21 @@ trait Userstamps
     public function startUserstamping(): void
     {
         $this->userstamping = true;
+    }
+
+    public function isFillingUpdatedByOnCreate(): bool
+    {
+        return $this->fillUpdatedByOnCreate;
+    }
+
+    public function stopFillingUpdatedByOnCreate(): void
+    {
+        $this->fillUpdatedByOnCreate = false;
+    }
+
+    public function startFillingUpdatedByOnCreate(): void
+    {
+        $this->fillUpdatedByOnCreate = true;
     }
 
     protected function getUserClass(): string
